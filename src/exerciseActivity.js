@@ -4,36 +4,56 @@ import {
   CardBody,
   CardHeader,
   Collapse,
-  Container,
+  Button,
   Row,
   Col
 } from "reactstrap";
 import Set from "./Set";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 class ExerciseActivity extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
+    this.toggleCollapse = this.toggleCollapse.bind(this);
+    this.toggleEdit = this.toggleEdit.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
+    this.saveEdit = this.saveEdit.bind(this);
 
     this.state = {
       exerciseActivity: this.props.exerciseActivity,
-      collapse: true
+      collapse: true,
+      editable: false
     };
   }
 
-  toggle() {
-    this.setState(state => ({ collapse: !state.collapse }));
+  toggleCollapse() {
+    //this.setState(state => ({ collapse: !state.collapse }));
+  }
+
+  toggleEdit(event) {
+    event.stopPropagation();
+    this.setState(state => ({ editable: !state.editable }));
+  }
+
+  cancelEdit() {
+    this.setState({ editable: false });
+  }
+
+  saveEdit() {
+    this.setState({ editable: false });
   }
 
   render() {
     const exerciseActivity = this.state.exerciseActivity;
     return (
       <Card>
-        <CardHeader onClick={this.toggle}>
+        <CardHeader onClick={this.toggleCollapse}>
           {exerciseActivity.exercise.name}
-        </CardHeader>
 
+          {this.renderEditControls()}
+        </CardHeader>
         <Collapse isOpen={this.state.collapse}>
           <CardBody>
             <Row>
@@ -49,10 +69,62 @@ class ExerciseActivity extends React.Component {
     );
   }
 
+  renderEditControls() {
+    if (this.state.editable) {
+      return (
+        <EditingControls onCancel={this.cancelEdit} onSave={this.saveEdit} />
+      );
+    } else {
+      return <ViewingControls onClick={this.toggleEdit} />;
+    }
+  }
+
   renderSets(sets) {
+    const editable = this.state.editable;
     return sets.map((set, index) => {
-      return <Set set={set} index={index} />;
+      return <Set set={set} index={index} editable={editable} />;
     });
   }
+}
+
+function EditingControls(props) {
+  return (
+    <div className="float-right">
+      <CancelButton onClick={props.onCancel} />
+      <SaveButton onClick={props.onSave} />
+    </div>
+  );
+}
+
+function ViewingControls(props) {
+  return (
+    <div className="float-right">
+      <EditButton onClick={props.onClick} />
+    </div>
+  );
+}
+
+function EditButton(props) {
+  return (
+    <Button color="primary" onClick={props.onClick} size="sm">
+      Edit <FontAwesomeIcon icon={faEdit} />
+    </Button>
+  );
+}
+
+function SaveButton(props) {
+  return (
+    <Button color="success" onClick={props.onClick} size="sm">
+      Save
+    </Button>
+  );
+}
+
+function CancelButton(props) {
+  return (
+    <Button className="mr-1" onClick={props.onClick} color="danger" size="sm">
+      Cancel
+    </Button>
+  );
 }
 export default ExerciseActivity;

@@ -1,10 +1,13 @@
 import React from "react";
 import { Row, Col, Badge, Form, FormGroup, Label, Input } from "reactstrap";
-import { stat } from "fs";
 
 const statusColours = {
   FAILED: "danger",
   COMPLETED: "success"
+};
+
+const statusBadgeStyle = {
+  width: "100%"
 };
 
 class Set extends React.Component {
@@ -16,6 +19,7 @@ class Set extends React.Component {
   }
 
   render() {
+    const { editable } = this.props;
     const { set } = this.props;
     return (
       <Form>
@@ -25,15 +29,27 @@ class Set extends React.Component {
           </Label>
 
           <Col>
-            <Input name="weight" id="weight" defaultValue={set.weightKg} />
+            <Input
+              name="weight"
+              id="weight"
+              defaultValue={set.weightKg}
+              disabled={!editable}
+            />
           </Col>
 
           <Col>
-            <Input name="reps" id="reps" defaultValue={set.numberOfReps} />
+            <Input
+              name="reps"
+              id="reps"
+              defaultValue={set.numberOfReps}
+              disabled={!editable}
+            />
           </Col>
 
           <Col>
-            <Badge color={statusColours[set.status]}>{set.status}</Badge>
+            <Badge color={statusColours[set.status]} style={statusBadgeStyle}>
+              {set.status}
+            </Badge>
           </Col>
         </FormGroup>
       </Form>
