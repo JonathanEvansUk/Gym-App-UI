@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import Set from "./Set";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 class ExerciseActivity extends React.Component {
   constructor(props) {
@@ -20,6 +20,8 @@ class ExerciseActivity extends React.Component {
     this.toggleEdit = this.toggleEdit.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
     this.saveEdit = this.saveEdit.bind(this);
+    this.handleSetRepsEdited = this.handleSetRepsEdited.bind(this);
+    this.handleSetWeightEdited = this.handleSetWeightEdited.bind(this);
 
     this.state = {
       exerciseActivity: this.props.exerciseActivity,
@@ -43,6 +45,57 @@ class ExerciseActivity extends React.Component {
 
   saveEdit() {
     this.setState({ editable: false });
+
+    console.log(this.state.newExerciseActivity);
+  }
+
+  copyExerciseActivity() {
+    return {
+      exercise: Object.assign({}, this.props.exerciseActivity.exercise),
+      sets: this.props.exerciseActivity.sets.slice()
+    };
+  }
+
+  handleSetWeightEdited(event, setIndex) {
+    let newExerciseActivity = this.state.newExerciseActivity;
+
+    // Check if we have tried to edit before.
+    if (newExerciseActivity === undefined) {
+      newExerciseActivity = this.copyExerciseActivity();
+    }
+
+    // Copy old set and update the weight
+    let newSet = {
+      ...newExerciseActivity.sets[setIndex],
+      weightKg: parseFloat(event.target.value)
+    };
+
+    newExerciseActivity.sets[setIndex] = newSet;
+
+    this.setState({
+      newExerciseActivity: newExerciseActivity
+    });
+  }
+
+  handleSetRepsEdited(event, setIndex) {
+    let newExerciseActivity = this.state.newExerciseActivity;
+
+    // Check if we have tried to edit before.
+    if (newExerciseActivity === undefined) {
+      newExerciseActivity = this.copyExerciseActivity();
+    }
+
+    // Copy old set and update the numberOfReps
+    let newSet = {
+      ...newExerciseActivity.sets[setIndex],
+      numberOfReps: parseFloat(event.target.value)
+    };
+
+    newExerciseActivity.sets[setIndex] = newSet;
+
+    this.setState({
+      newExerciseActivity: newExerciseActivity
+    });
   }
 
   render() {
@@ -82,7 +135,15 @@ class ExerciseActivity extends React.Component {
   renderSets(sets) {
     const editable = this.state.editable;
     return sets.map((set, index) => {
-      return <Set set={set} index={index} editable={editable} />;
+      return (
+        <Set
+          set={set}
+          index={index}
+          editable={editable}
+          onSetWeightEdited={this.handleSetWeightEdited}
+          onSetRepsEdited={this.handleSetRepsEdited}
+        />
+      );
     });
   }
 }
@@ -115,15 +176,15 @@ function EditButton(props) {
 function SaveButton(props) {
   return (
     <Button color="success" onClick={props.onClick} size="sm">
-      Save
+      Save <FontAwesomeIcon icon={faCheck} />
     </Button>
   );
 }
 
 function CancelButton(props) {
   return (
-    <Button className="mr-1" onClick={props.onClick} color="danger" size="sm">
-      Cancel
+    <Button className="mr-2" onClick={props.onClick} color="danger" size="sm">
+      Cancel <FontAwesomeIcon icon={faTimes} />
     </Button>
   );
 }

@@ -13,19 +13,25 @@ const statusBadgeStyle = {
 class Set extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      index: this.props.index
-    };
+    this.handleSetWeightEdited = this.handleSetWeightEdited.bind(this);
+    this.handleSetRepsEdited = this.handleSetRepsEdited.bind(this);
+  }
+
+  handleSetWeightEdited(e) {
+    this.props.onSetWeightEdited(e, this.props.index);
+  }
+
+  handleSetRepsEdited(e) {
+    this.props.onSetRepsEdited(e, this.props.index);
   }
 
   render() {
-    const { editable } = this.props;
-    const { set } = this.props;
+    const { editable, set, index } = this.props;
     return (
       <Form>
         <FormGroup row>
           <Label for="weight" xs="auto">
-            {this.state.index + 1}
+            {index + 1}
           </Label>
 
           <Col>
@@ -34,6 +40,7 @@ class Set extends React.Component {
               id="weight"
               defaultValue={set.weightKg}
               disabled={!editable}
+              onChange={this.handleSetWeightEdited}
             />
           </Col>
 
@@ -43,6 +50,7 @@ class Set extends React.Component {
               id="reps"
               defaultValue={set.numberOfReps}
               disabled={!editable}
+              onChange={this.handleSetRepsEdited}
             />
           </Col>
 
