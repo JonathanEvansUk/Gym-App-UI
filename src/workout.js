@@ -15,26 +15,31 @@ class Workout extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
-
-    let cardsCollapsedState = new Array(
-      this.props.location.state.workout.length
-    ).fill(false);
-
-    this.state = { collapse: cardsCollapsedState };
+    console.log(this.props);
+    this.state = {
+      loaded: false,
+      workout: undefined
+    };
   }
 
-  toggle(id) {
-    const updatedCollapses = this.state.collapse.slice();
-    updatedCollapses[id] = !updatedCollapses[id];
+  componentDidMount() {
+    const { id } = this.props.match.params;
 
-    this.setState({
-      collapse: updatedCollapses
-    });
+    fetch("http://localhost:8080/workouts/" + id)
+      .then(res => res.json())
+      .then(result => {
+        this.setState({
+          loaded: true,
+          workout: result
+        });
+      });
   }
 
   render() {
-    const { workout } = this.props.location.state;
+    const { workout } = this.state;
+    if (workout === undefined) {
+      return <h1>Loading...</h1>;
+    }
     return (
       <Card>
         <CardHeader>{workout.name}</CardHeader>
@@ -47,39 +52,6 @@ class Workout extends React.Component {
   renderExerciseActivity(workout) {
     return workout.exerciseActivities.map((exerciseActivity, index) => {
       return <ExerciseActivity exerciseActivity={exerciseActivity} />;
-    });
-  }
-
-  renderExerciseActivity2(workout) {
-    return workout.exerciseActivities.map((exerciseActivity, index) => {
-      console.log(exerciseActivity);
-      return (
-        <Card key={index}>
-          <CardHeader onClick={() => this.toggle(index)}>
-            {exerciseActivity.exercise.name}
-          </CardHeader>
-
-          <Collapse isOpen={this.state.collapse[index]}>
-            <CardBody>
-              <Container>{this.renderSets(exerciseActivity.sets)}</Container>
-            </CardBody>
-          </Collapse>
-        </Card>
-      );
-    });
-  }
-
-  renderSets(sets) {
-    return sets.map(set => {
-      return (
-        <Row>
-          <Col>{set.weightKg} Kg</Col>
-
-          <Col>{set.numberOfReps}</Col>
-
-          <Col>{set.status}</Col>
-        </Row>
-      );
     });
   }
 }

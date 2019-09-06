@@ -46,11 +46,34 @@ class ExerciseActivity extends React.Component {
   saveEdit() {
     this.setState({ editable: false });
 
-    console.log(this.state.newExerciseActivity);
+    // Do not make call to server if no changes
+    if (this.state.newExerciseActivity === undefined) {
+    } else {
+      let ea = this.state.newExerciseActivity;
+
+      let json = JSON.stringify({
+        id: ea.id,
+        exercise: ea.exercise,
+        sets: ea.sets,
+        notes: ea.notes
+      });
+
+      fetch("http://localhost:8080/workouts/1/updateSets", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: json
+      }).then(res => console.log(res));
+
+      this.setState({
+        exerciseActivity: ea,
+        newExerciseActivity: undefined
+      });
+    }
   }
 
   copyExerciseActivity() {
     return {
+      id: this.props.exerciseActivity.id,
       exercise: Object.assign({}, this.props.exerciseActivity.exercise),
       sets: this.props.exerciseActivity.sets.slice()
     };
