@@ -9,8 +9,8 @@ import {
   Col
 } from "reactstrap";
 import Set from "./Set";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+
+import EditControls from "./EditControls";
 
 class ExerciseActivity extends React.Component {
   constructor(props) {
@@ -128,7 +128,12 @@ class ExerciseActivity extends React.Component {
         <CardHeader onClick={this.toggleCollapse}>
           {exerciseActivity.exercise.name}
 
-          {this.renderEditControls()}
+          <EditControls
+            editable={this.state.editable}
+            onEdit={this.toggleEdit}
+            onSave={this.saveEdit}
+            onCancel={this.cancelEdit}
+          />
         </CardHeader>
         <Collapse isOpen={this.state.collapse}>
           <CardBody>
@@ -143,16 +148,6 @@ class ExerciseActivity extends React.Component {
         </Collapse>
       </Card>
     );
-  }
-
-  renderEditControls() {
-    if (this.state.editable) {
-      return (
-        <EditingControls onCancel={this.cancelEdit} onSave={this.saveEdit} />
-      );
-    } else {
-      return <ViewingControls onClick={this.toggleEdit} />;
-    }
   }
 
   renderSets(sets) {
@@ -171,44 +166,4 @@ class ExerciseActivity extends React.Component {
   }
 }
 
-function EditingControls(props) {
-  return (
-    <div className="float-right">
-      <CancelButton onClick={props.onCancel} />
-      <SaveButton onClick={props.onSave} />
-    </div>
-  );
-}
-
-function ViewingControls(props) {
-  return (
-    <div className="float-right">
-      <EditButton onClick={props.onClick} />
-    </div>
-  );
-}
-
-function EditButton(props) {
-  return (
-    <Button color="primary" onClick={props.onClick} size="sm">
-      Edit <FontAwesomeIcon icon={faEdit} />
-    </Button>
-  );
-}
-
-function SaveButton(props) {
-  return (
-    <Button color="success" onClick={props.onClick} size="sm">
-      Save <FontAwesomeIcon icon={faCheck} />
-    </Button>
-  );
-}
-
-function CancelButton(props) {
-  return (
-    <Button className="mr-2" onClick={props.onClick} color="danger" size="sm">
-      Cancel <FontAwesomeIcon icon={faTimes} />
-    </Button>
-  );
-}
 export default ExerciseActivity;
