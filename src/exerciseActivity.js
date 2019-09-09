@@ -143,27 +143,33 @@ class ExerciseActivity extends React.Component {
               <Col>Reps</Col>
               <Col>Status</Col>
             </Row>
-            {this.renderSets(exerciseActivity.sets)}
+
+            <Sets
+              sets={exerciseActivity.sets}
+              editable={this.state.editable}
+              onSetWeightEdited={this.handleSetWeightEdited}
+              onSetRepsEdited={this.handleSetRepsEdited}
+            />
           </CardBody>
         </Collapse>
       </Card>
     );
   }
+}
 
-  renderSets(sets) {
-    const editable = this.state.editable;
-    return sets.map((set, index) => {
-      return (
-        <Set
-          set={set}
-          index={index}
-          editable={editable}
-          onSetWeightEdited={this.handleSetWeightEdited}
-          onSetRepsEdited={this.handleSetRepsEdited}
-        />
-      );
-    });
-  }
+function Sets(props) {
+  const { editable, sets, onSetWeightEdited, onSetRepsEdited } = props;
+  return sets.map((set, index) => {
+    return (
+      <Set
+        set={set}
+        index={index}
+        editable={editable}
+        onSetWeightEdited={onSetWeightEdited}
+        onSetRepsEdited={onSetRepsEdited}
+      />
+    );
+  });
 }
 
 export default ExerciseActivity;
