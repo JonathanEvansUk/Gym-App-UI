@@ -58,7 +58,7 @@ class Set extends React.Component {
   renderDeleteSetColumn() {
     if (this.props.editable) {
       return (
-        <Col xs="auto">
+        <Col xs="1">
           <Button outline color="danger" onClick={this.handleSetDeleteClicked}>
             <FontAwesomeIcon icon={faTimesCircle} size="lg" />
           </Button>
@@ -66,7 +66,7 @@ class Set extends React.Component {
       );
     }
 
-    return null;
+    return <Col xs="1"></Col>;
   }
 
   render() {

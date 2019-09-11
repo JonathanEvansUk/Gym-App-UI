@@ -134,9 +134,9 @@ class ExerciseActivity extends React.Component {
 
   renderDeleteSetColumn() {
     if (this.state.editable) {
-      return <Col xs="auto">Delete</Col>;
+      return <Col xs="1">Delete</Col>;
     }
-    return null;
+    return <Col xs="1"></Col>;
   }
 
   render() {
