@@ -1,5 +1,5 @@
 import React from "react";
-import ExerciseActivity from "./exerciseActivity.js";
+import ExerciseActivity from "./exerciseActivity/exerciseActivity.js";
 
 import {
   Container,
