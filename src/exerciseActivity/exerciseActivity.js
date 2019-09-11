@@ -1,17 +1,10 @@
 import React from "react";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Collapse,
-  Button,
-  Row,
-  Col
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Collapse, Row, Col } from "reactstrap";
 import Set from "./set/Set";
 
 import EditControls from "./EditControls";
 import AddSetButton from "./AddSetButton";
+import { stat } from "fs";
 
 class ExerciseActivity extends React.Component {
   constructor(props) {
@@ -25,12 +18,13 @@ class ExerciseActivity extends React.Component {
     this.handleSetWeightEdited = this.handleSetWeightEdited.bind(this);
     this.handleSetStatusEdited = this.handleSetStatusEdited.bind(this);
     this.addSet = this.addSet.bind(this);
+    this.handleSetDeleteClicked = this.handleSetDeleteClicked.bind(this);
 
     this.state = {
       exerciseActivity: this.props.exerciseActivity,
       collapse: true,
       editable: false,
-      newSets: []
+      sets: this.props.exerciseActivity.sets
     };
   }
 
@@ -40,54 +34,47 @@ class ExerciseActivity extends React.Component {
 
   toggleEdit(event) {
     event.stopPropagation();
-    this.setState(state => ({ editable: !state.editable }));
+
+    this.setState({
+      editable: true
+    });
   }
 
   cancelEdit() {
-    this.setState({ editable: false, newSets: [] });
+    this.setState({ editable: false });
   }
 
   saveEdit() {
     this.setState({ editable: false });
 
-    // Do not make call to server if no changes
-    if (this.state.newExerciseActivity === undefined) {
-    } else {
-      let ea = this.state.newExerciseActivity;
+    let { exerciseActivity } = this.props;
 
-      let json = JSON.stringify({
-        id: ea.id,
-        exercise: ea.exercise,
-        sets: ea.sets,
-        notes: ea.notes
-      });
+    let json = JSON.stringify({
+      id: exerciseActivity.id,
+      exercise: exerciseActivity.exercise,
+      sets: this.state.sets,
+      notes: exerciseActivity.notes
+    });
 
-      fetch("http://localhost:8080/workouts/1/updateSets", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: json
-      }).then(res => console.log(res));
-
-      this.setState({
-        exerciseActivity: ea,
-        newExerciseActivity: undefined
-      });
-    }
-  }
-
-  addSet(exerciseActivityId) {
-    let newExerciseActivity = this.state.newExerciseActivity;
-
-    // Check if we have tried to edit before.
-    if (newExerciseActivity === undefined) {
-      newExerciseActivity = this.copyExerciseActivity();
-    }
-
-    newExerciseActivity.sets.push();
+    fetch("http://localhost:8080/workouts/1/updateSets", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: json
+    }).then(res => console.log(res));
 
     this.setState({
-      newExerciseActivity: newExerciseActivity
+      exerciseActivity: exerciseActivity
     });
+  }
+
+  addSet() {
+    let newSet = {};
+
+    let updatedSets = this.state.sets.slice();
+
+    updatedSets.push(newSet);
+
+    this.setState({ sets: updatedSets });
   }
 
   copyExerciseActivity() {
@@ -99,74 +86,50 @@ class ExerciseActivity extends React.Component {
   }
 
   handleSetWeightEdited(event, setIndex) {
-    let newExerciseActivity = this.state.newExerciseActivity;
-
-    // Check if we have tried to edit before.
-    if (newExerciseActivity === undefined) {
-      newExerciseActivity = this.copyExerciseActivity();
-    }
-
-    // Copy old set and update the weight
-    let newSet = {
-      ...newExerciseActivity.sets[setIndex],
+    let updatedSet = {
+      ...this.state.sets[setIndex],
       weightKg: parseFloat(event.target.value)
     };
 
-    newExerciseActivity.sets[setIndex] = newSet;
+    let updatedSets = this.state.sets.slice();
 
-    this.setState({
-      newExerciseActivity: newExerciseActivity
-    });
+    updatedSets[setIndex] = updatedSet;
+
+    this.setState({ sets: updatedSets });
   }
 
   handleSetRepsEdited(event, setIndex) {
-    let newExerciseActivity = this.state.newExerciseActivity;
-
-    // Check if we have tried to edit before.
-    if (newExerciseActivity === undefined) {
-      newExerciseActivity = this.copyExerciseActivity();
-    }
-
-    // Copy old set and update the numberOfReps
-    let newSet = {
-      ...newExerciseActivity.sets[setIndex],
+    let updatedSet = {
+      ...this.state.sets[setIndex],
       numberOfReps: parseFloat(event.target.value)
     };
 
-    newExerciseActivity.sets[setIndex] = newSet;
+    let updatedSets = this.state.sets.slice();
 
-    this.setState({
-      newExerciseActivity: newExerciseActivity
-    });
+    updatedSets[setIndex] = updatedSet;
+
+    this.setState({ sets: updatedSets });
   }
 
   handleSetStatusEdited(status, setIndex) {
-    let newExerciseActivity = this.state.newExerciseActivity;
-
-    // Check if we have tried to edit before.
-    if (newExerciseActivity === undefined) {
-      newExerciseActivity = this.copyExerciseActivity();
-    }
-
-    // Copy old set and update the status
-    let newSet = {
-      ...newExerciseActivity.sets[setIndex],
+    let updatedSet = {
+      ...this.state.sets[setIndex],
       status: status
     };
 
-    newExerciseActivity.sets[setIndex] = newSet;
+    let updatedSets = this.state.sets.slice();
 
-    this.setState({
-      newExerciseActivity: newExerciseActivity
-    });
+    updatedSets[setIndex] = updatedSet;
+
+    this.setState({ sets: updatedSets });
   }
 
   handleSetDeleteClicked(setIndex) {
-    // let newExerciseActivity = this.state.newExerciseActivity;
-    // // Check if we have tried to edit before.
-    // if (newExerciseActivity === undefined) {
-    //   newExerciseActivity = this.copyExerciseActivity();
-    // }
+    let updatedSets = this.state.sets.slice();
+
+    updatedSets.splice(setIndex, 1);
+
+    this.setState({ sets: updatedSets });
   }
 
   renderDeleteSetColumn() {
@@ -178,7 +141,7 @@ class ExerciseActivity extends React.Component {
 
   render() {
     const exerciseActivity = this.state.exerciseActivity;
-    const sets = exerciseActivity.sets.slice().concat(this.state.newSets);
+    const sets = this.state.sets;
     const deleteSetColumn = this.renderDeleteSetColumn();
     return (
       <Card>
@@ -229,7 +192,8 @@ function Sets(props) {
     sets,
     onSetWeightEdited,
     onSetRepsEdited,
-    onSetStatusEdited
+    onSetStatusEdited,
+    onSetDeleteClicked
   } = props;
   return sets.map((set, index) => {
     return (
@@ -240,6 +204,7 @@ function Sets(props) {
         onSetWeightEdited={onSetWeightEdited}
         onSetRepsEdited={onSetRepsEdited}
         onSetStatusEdited={onSetStatusEdited}
+        onSetDeleteClicked={onSetDeleteClicked}
       />
     );
   });

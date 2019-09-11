@@ -19,6 +19,7 @@ class Set extends React.Component {
     this.handleSetWeightEdited = this.handleSetWeightEdited.bind(this);
     this.handleSetRepsEdited = this.handleSetRepsEdited.bind(this);
     this.handleSetStatusEdited = this.handleSetStatusEdited.bind(this);
+    this.handleSetDeleteClicked = this.handleSetDeleteClicked.bind(this);
   }
 
   handleSetWeightEdited(e) {
@@ -58,7 +59,7 @@ class Set extends React.Component {
     if (this.props.editable) {
       return (
         <Col xs="auto">
-          <Button outline color="danger">
+          <Button outline color="danger" onClick={this.handleSetDeleteClicked}>
             <FontAwesomeIcon icon={faTimesCircle} size="lg" />
           </Button>
         </Col>
