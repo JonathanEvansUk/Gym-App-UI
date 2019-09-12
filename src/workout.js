@@ -11,7 +11,6 @@ class Workout extends React.Component {
 
     this.toggleModal = this.toggleModal.bind(this);
 
-    console.log(this.props);
     this.state = {
       loaded: false,
       workout: undefined,
@@ -68,7 +67,12 @@ class Workout extends React.Component {
 
   renderExerciseActivity(workout) {
     return workout.exerciseActivities.map((exerciseActivity, index) => {
-      return <ExerciseActivity exerciseActivity={exerciseActivity} />;
+      return (
+        <ExerciseActivity
+          key={exerciseActivity.id}
+          exerciseActivity={exerciseActivity}
+        />
+      );
     });
   }
 }

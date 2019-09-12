@@ -4,7 +4,6 @@ import Set from "./set/Set";
 
 import EditControls from "./EditControls";
 import AddSetButton from "./AddSetButton";
-import { stat } from "fs";
 
 class ExerciseActivity extends React.Component {
   constructor(props) {
@@ -194,6 +193,7 @@ function Sets(props) {
   return sets.map((set, index) => {
     return (
       <Set
+        key={index}
         set={set}
         index={index}
         editable={editable}

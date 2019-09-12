@@ -4,7 +4,7 @@ import App from "./app.js";
 import WorkoutContainer from "./workoutContainer.js";
 import Workout from "./workout.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 ReactDOM.render(
   <Router>
