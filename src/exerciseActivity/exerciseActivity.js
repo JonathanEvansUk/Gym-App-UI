@@ -85,17 +85,21 @@ class ExerciseActivity extends React.Component {
     };
   }
 
+  updateSetAtIndex(updatedSet, setIndex) {
+    let updatedSets = this.state.sets.slice();
+
+    updatedSets[setIndex] = updatedSet;
+
+    this.setState({ sets: updatedSets });
+  }
+
   handleSetWeightEdited(event, setIndex) {
     let updatedSet = {
       ...this.state.sets[setIndex],
       weightKg: parseFloat(event.target.value)
     };
 
-    let updatedSets = this.state.sets.slice();
-
-    updatedSets[setIndex] = updatedSet;
-
-    this.setState({ sets: updatedSets });
+    this.updateSetAtIndex(updatedSet, setIndex);
   }
 
   handleSetRepsEdited(event, setIndex) {
@@ -104,11 +108,7 @@ class ExerciseActivity extends React.Component {
       numberOfReps: parseFloat(event.target.value)
     };
 
-    let updatedSets = this.state.sets.slice();
-
-    updatedSets[setIndex] = updatedSet;
-
-    this.setState({ sets: updatedSets });
+    this.updateSetAtIndex(updatedSet, setIndex);
   }
 
   handleSetStatusEdited(status, setIndex) {
@@ -117,11 +117,7 @@ class ExerciseActivity extends React.Component {
       status: status
     };
 
-    let updatedSets = this.state.sets.slice();
-
-    updatedSets[setIndex] = updatedSet;
-
-    this.setState({ sets: updatedSets });
+    this.updateSetAtIndex(updatedSet, setIndex);
   }
 
   handleSetDeleteClicked(setIndex) {
@@ -140,7 +136,7 @@ class ExerciseActivity extends React.Component {
   }
 
   render() {
-    const exerciseActivity = this.state.exerciseActivity;
+    const exerciseActivity = this.props.exerciseActivity;
     const sets = this.state.sets;
     const deleteSetColumn = this.renderDeleteSetColumn();
     return (
