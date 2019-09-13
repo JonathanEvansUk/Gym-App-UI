@@ -17,6 +17,8 @@ class AddExerciseActivityModal extends React.Component {
     super(props);
 
     this.toggleModal = this.toggleModal.bind(this);
+    this.addExerciseActivity = this.addExerciseActivity.bind(this);
+    this.handleExerciseChosen = this.handleExerciseChosen.bind(this);
 
     this.state = { modal: this.props.modal };
   }
@@ -24,11 +26,27 @@ class AddExerciseActivityModal extends React.Component {
   componentDidMount() {
     fetch("http://localhost:8080/exercises")
       .then(res => res.json())
-      .then(res => this.setState({ exercises: res }));
+      .then(res => this.setState({ exercises: res, chosenExercise: res[0] }));
   }
 
   toggleModal() {
     this.props.toggleModal();
+  }
+
+  addExerciseActivity() {
+    //console.log(this.state.chosenExercise);
+    this.props.toggleModal();
+
+    this.props.addExerciseActivity(this.state.chosenExercise);
+  }
+
+  handleExerciseChosen(event) {
+    // console.log("Exercise Chosen");
+    // console.log(event.target.value);
+
+    let chosenExercise = this.state.exercises[event.target.value];
+
+    this.setState({ chosenExercise: chosenExercise });
   }
 
   renderSelectExerciseInput() {
@@ -36,12 +54,20 @@ class AddExerciseActivityModal extends React.Component {
       return <p>No exercises found.</p>;
     }
 
-    let exerciseOptions = this.state.exercises.map(exercise => {
-      return <option key={exercise.id}>{exercise.name}</option>;
+    let exerciseOptions = this.state.exercises.map((exercise, index) => {
+      return (
+        <option key={exercise.id} value={index}>
+          {exercise.name}
+        </option>
+      );
     });
 
     return (
-      <Input type="select" id="exerciseSelect">
+      <Input
+        type="select"
+        id="exerciseSelect"
+        onChange={this.handleExerciseChosen}
+      >
         {exerciseOptions}
       </Input>
     );
@@ -64,7 +90,7 @@ class AddExerciseActivityModal extends React.Component {
           <Button color="secondary" onClick={this.toggleModal}>
             Cancel
           </Button>
-          <Button color="secondary" onClick={this.toggleModal}>
+          <Button color="primary" onClick={this.addExerciseActivity}>
             Add
           </Button>
         </ModalFooter>

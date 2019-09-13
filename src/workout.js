@@ -10,6 +10,7 @@ class Workout extends React.Component {
     super(props);
 
     this.toggleModal = this.toggleModal.bind(this);
+    this.addExerciseActivity = this.addExerciseActivity.bind(this);
 
     this.state = {
       loaded: false,
@@ -37,6 +38,31 @@ class Workout extends React.Component {
     }));
   }
 
+  addExerciseActivity(exercise) {
+    console.log("adding exercise activity");
+    console.log(exercise);
+    //need to make call to server to add new exercise activity, then with generated ID returned we can render
+
+    let json = JSON.stringify({
+      exerciseId: exercise.id.toString()
+    });
+
+    console.log(json);
+
+    fetch(
+      "http://localhost:8080/workouts/" +
+        this.state.workout.id +
+        "/addExerciseActivity",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: exercise.id
+      }
+    )
+      .then(res => res.json())
+      .then(res => console.log(res));
+  }
+
   render() {
     const { workout } = this.state;
     if (workout === undefined) {
@@ -57,6 +83,7 @@ class Workout extends React.Component {
           <AddExerciseActivityModal
             modal={this.state.modal}
             toggleModal={this.toggleModal}
+            addExerciseActivity={this.addExerciseActivity}
           />
         </CardHeader>
 
