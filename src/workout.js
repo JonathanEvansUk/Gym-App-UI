@@ -11,6 +11,9 @@ class Workout extends React.Component {
 
     this.toggleModal = this.toggleModal.bind(this);
     this.addExerciseActivity = this.addExerciseActivity.bind(this);
+    this.addExerciseActivityToWorkout = this.addExerciseActivityToWorkout.bind(
+      this
+    );
 
     this.state = {
       loaded: false,
@@ -39,16 +42,6 @@ class Workout extends React.Component {
   }
 
   addExerciseActivity(exercise) {
-    console.log("adding exercise activity");
-    console.log(exercise);
-    //need to make call to server to add new exercise activity, then with generated ID returned we can render
-
-    let json = JSON.stringify({
-      exerciseId: exercise.id.toString()
-    });
-
-    console.log(json);
-
     fetch(
       "http://localhost:8080/workouts/" +
         this.state.workout.id +
@@ -60,7 +53,21 @@ class Workout extends React.Component {
       }
     )
       .then(res => res.json())
-      .then(res => console.log(res));
+      .then(exerciseActivity =>
+        this.addExerciseActivityToWorkout(exerciseActivity)
+      );
+  }
+
+  addExerciseActivityToWorkout(newExerciseActivity) {
+    let updatedExerciseActivities = this.state.workout.exerciseActivities.slice();
+    updatedExerciseActivities.push(newExerciseActivity);
+
+    let updatedWorkout = {
+      ...this.state.workout,
+      exerciseActivities: updatedExerciseActivities
+    };
+
+    this.setState({ workout: updatedWorkout });
   }
 
   render() {

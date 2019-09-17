@@ -36,9 +36,7 @@ class WorkoutTable extends React.Component {
 
   renderExercisesList(exercises) {
     return exercises.map(exerciseActivity => (
-      <li key={exerciseActivity.exercise.name}>
-        {exerciseActivity.exercise.name}
-      </li>
+      <li key={exerciseActivity.id}>{exerciseActivity.exercise.name}</li>
     ));
   }
 
