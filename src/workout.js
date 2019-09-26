@@ -14,7 +14,10 @@ class Workout extends React.Component {
     this.addExerciseActivityToWorkout = this.addExerciseActivityToWorkout.bind(
       this
     );
-
+    this.deleteExerciseActivity = this.deleteExerciseActivity.bind(this);
+    this.removeExerciseActivityFromWorkout = this.removeExerciseActivityFromWorkout.bind(
+      this
+    );
     this.state = {
       loaded: false,
       workout: undefined,
@@ -70,6 +73,42 @@ class Workout extends React.Component {
     this.setState({ workout: updatedWorkout });
   }
 
+  deleteExerciseActivity(exerciseAtivityId) {
+    const { id } = this.props.match.params;
+
+    fetch(
+      "http://localhost:8080/workouts/" +
+        id +
+        "/exerciseActivity/" +
+        exerciseAtivityId,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      }
+    )
+      .then(res => res.json())
+      //TODO add error handling?
+      .then(exerciseActivity =>
+        this.removeExerciseActivityFromWorkout(exerciseActivity)
+      );
+  }
+
+  removeExerciseActivityFromWorkout(deletedExerciseActivity) {
+    let updatedExerciseActivities = this.state.workout.exerciseActivities.slice();
+
+    //remove exercise activity
+    updatedExerciseActivities = updatedExerciseActivities.filter(
+      exerciseActivity => exerciseActivity.id !== deletedExerciseActivity.id
+    );
+
+    let updatedWorkout = {
+      ...this.state.workout,
+      exerciseActivities: updatedExerciseActivities
+    };
+
+    this.setState({ workout: updatedWorkout });
+  }
+
   render() {
     const { workout } = this.state;
     if (workout === undefined) {
@@ -100,11 +139,13 @@ class Workout extends React.Component {
   }
 
   renderExerciseActivity(workout) {
-    return workout.exerciseActivities.map((exerciseActivity, index) => {
+    return workout.exerciseActivities.map(exerciseActivity => {
       return (
         <ExerciseActivity
           key={exerciseActivity.id}
+          workoutId={workout.id}
           exerciseActivity={exerciseActivity}
+          deleteExerciseActivity={this.deleteExerciseActivity}
         />
       );
     });

@@ -4,14 +4,15 @@ import Set from "./set/Set";
 
 import EditControls from "./EditControls";
 import AddSetButton from "./AddSetButton";
-
 class ExerciseActivity extends React.Component {
   constructor(props) {
     super(props);
 
+    this.toggleModal = this.toggleModal.bind(this);
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
+    this.deleteExerciseActivity = this.deleteExerciseActivity.bind(this);
     this.saveEdit = this.saveEdit.bind(this);
     this.handleSetRepsEdited = this.handleSetRepsEdited.bind(this);
     this.handleSetWeightEdited = this.handleSetWeightEdited.bind(this);
@@ -23,8 +24,15 @@ class ExerciseActivity extends React.Component {
       exerciseActivity: this.props.exerciseActivity,
       collapse: true,
       editable: false,
-      sets: this.props.exerciseActivity.sets
+      sets: this.props.exerciseActivity.sets,
+      modal: false
     };
+  }
+
+  toggleModal() {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
   }
 
   toggleCollapse() {
@@ -43,6 +51,10 @@ class ExerciseActivity extends React.Component {
     this.setState({ editable: false });
   }
 
+  deleteExerciseActivity() {
+    this.props.deleteExerciseActivity(this.props.exerciseActivity.id);
+  }
+
   saveEdit() {
     this.setState({ editable: false });
 
@@ -55,11 +67,14 @@ class ExerciseActivity extends React.Component {
       notes: exerciseActivity.notes
     });
 
-    fetch("http://localhost:8080/workouts/1/updateSets", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: json
-    }).then(res => console.log(res));
+    fetch(
+      "http://localhost:8080/workouts/" + this.props.workoutId + "/updateSets",
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: json
+      }
+    ).then(res => console.log(res));
 
     this.setState({
       exerciseActivity: exerciseActivity
@@ -134,10 +149,42 @@ class ExerciseActivity extends React.Component {
     return <Col xs="1"></Col>;
   }
 
+  renderExerciseActivityBody() {
+    const sets = this.state.sets;
+
+    if (sets === undefined || sets.length === 0) {
+      return (
+        <p>There are no sets to display. Click the edit button to add sets.</p>
+      );
+    }
+
+    const deleteSetColumn = this.renderDeleteSetColumn();
+
+    return (
+      <div>
+        <Row>
+          <Col xs="auto">#</Col>
+          <Col>Weight</Col>
+          <Col>Reps</Col>
+          <Col>Status</Col>
+          {deleteSetColumn}
+        </Row>
+
+        <Sets
+          sets={sets}
+          editable={this.state.editable}
+          onSetWeightEdited={this.handleSetWeightEdited}
+          onSetRepsEdited={this.handleSetRepsEdited}
+          onSetStatusEdited={this.handleSetStatusEdited}
+          onSetDeleteClicked={this.handleSetDeleteClicked}
+        />
+      </div>
+    );
+  }
+
   render() {
     const exerciseActivity = this.props.exerciseActivity;
-    const sets = this.state.sets;
-    const deleteSetColumn = this.renderDeleteSetColumn();
+    const exerciseActivityBody = this.renderExerciseActivityBody();
     return (
       <Card>
         <CardHeader onClick={this.toggleCollapse}>
@@ -148,27 +195,14 @@ class ExerciseActivity extends React.Component {
             onEdit={this.toggleEdit}
             onSave={this.saveEdit}
             onCancel={this.cancelEdit}
+            deleteExerciseActivity={this.deleteExerciseActivity}
+            modal={this.state.modal}
+            toggleModal={this.toggleModal}
           />
         </CardHeader>
         <Collapse isOpen={this.state.collapse}>
           <CardBody>
-            <Row>
-              <Col xs="auto">#</Col>
-              <Col>Weight</Col>
-              <Col>Reps</Col>
-              <Col>Status</Col>
-              {deleteSetColumn}
-            </Row>
-
-            <Sets
-              sets={sets}
-              editable={this.state.editable}
-              onSetWeightEdited={this.handleSetWeightEdited}
-              onSetRepsEdited={this.handleSetRepsEdited}
-              onSetStatusEdited={this.handleSetStatusEdited}
-              onSetDeleteClicked={this.handleSetDeleteClicked}
-            />
-
+            {exerciseActivityBody}
             <AddSetButton
               exerciseActivityId={exerciseActivity.id}
               editable={this.state.editable}
