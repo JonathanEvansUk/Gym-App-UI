@@ -1,6 +1,6 @@
 import React from "react";
 import MyNavbar from "./navbar.js";
-import WorkoutContainer from "./workoutContainer.js";
+import WorkoutContainer from "./workout/workoutContainer.js";
 import { Container } from "reactstrap";
 import { Link } from "react-router-dom";
 
