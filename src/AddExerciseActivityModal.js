@@ -23,6 +23,7 @@ class AddExerciseActivityModal extends React.Component {
     this.state = { modal: this.props.modal };
   }
 
+  //TODO move this up to parent
   componentDidMount() {
     fetch("http://localhost:8080/exercises")
       .then(res => res.json())
@@ -31,6 +32,8 @@ class AddExerciseActivityModal extends React.Component {
 
   toggleModal() {
     this.props.toggleModal();
+
+    this.setState({ chosenExercise: this.state.exercises[0] });
   }
 
   addExerciseActivity() {
@@ -38,6 +41,8 @@ class AddExerciseActivityModal extends React.Component {
     this.props.toggleModal();
 
     this.props.addExerciseActivity(this.state.chosenExercise);
+
+    this.setState({ chosenExercise: this.state.exercises[0] });
   }
 
   handleExerciseChosen(event) {
@@ -74,6 +79,7 @@ class AddExerciseActivityModal extends React.Component {
   }
 
   render() {
+    console.log(this.state.exercises);
     return (
       <Modal isOpen={this.props.modal} toggle={this.toggleModal}>
         <ModalHeader>Add Exercise Activity</ModalHeader>
