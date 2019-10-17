@@ -22,43 +22,33 @@ class WorkoutContainer extends React.Component {
     }));
   }
 
-  addWorkout(workoutName, workoutType, workoutTime) {
-    console.log(workoutName, workoutType, workoutTime);
+  handleAddWorkoutResponse(res) {
+    if (res.status === 200) {
+      res.json().then(res =>
+        this.setState({
+          workouts: [...this.state.workouts, res]
+        })
+      );
+    } else if (res.status === 400) {
+      //TODO this may be removed in future
+      res.json().then(res => {
+        console.log(res);
+      });
+    }
+  }
 
+  addWorkout(workoutName, workoutType, workoutTime) {
     let createWorkoutJson = JSON.stringify({
       workoutName: workoutName,
       workoutType: workoutType,
       performedAtTimestampUtc: workoutTime
     });
 
-    console.log(createWorkoutJson);
-
     fetch("http://localhost:8080/workouts/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: createWorkoutJson
-    }).then(res => {
-      if (res.status === 200) {
-        res.json().then(res =>
-          this.setState({
-            workouts: [...this.state.workouts, res]
-          })
-        );
-      } else if (res.status === 400) {
-        res.json().then(res => {
-          console.log(res);
-        });
-      }
-    });
-
-    // .then(res => {
-    //   return res.json();
-    // })
-    // .then(res =>
-    //   this.setState({
-    //     workouts: [...this.state.workouts, res]
-    //   })
-    // );
+    }).then(res => this.handleAddWorkoutResponse(res));
   }
 
   componentDidMount() {

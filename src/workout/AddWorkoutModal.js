@@ -46,13 +46,13 @@ class AddWorkoutModal extends React.Component {
   }
 
   addWorkout() {
-    this.props.toggleModal();
-
     this.props.addWorkout(
       this.state.workoutName,
       this.state.chosenWorkoutType,
       this.state.startDate
     );
+
+    this.props.toggleModal();
   }
 
   handleWorkoutNameChanged(event) {
