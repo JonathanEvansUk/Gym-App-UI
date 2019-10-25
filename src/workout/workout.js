@@ -18,6 +18,7 @@ class Workout extends React.Component {
     this.removeExerciseActivityFromWorkout = this.removeExerciseActivityFromWorkout.bind(
       this
     );
+    this.deleteWorkout = this.deleteWorkout.bind(this);
     this.state = {
       loaded: false,
       workout: undefined,
@@ -109,6 +110,16 @@ class Workout extends React.Component {
     this.setState({ workout: updatedWorkout });
   }
 
+  deleteWorkout() {
+    const { id } = this.props.match.params;
+
+    //TODO remove console log, and redirect to workout list
+    fetch("http://localhost:8080/workouts/" + id, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    }).then(res => this.props.history.push("/workouts/"));
+  }
+
   render() {
     const { workout } = this.state;
     if (workout === undefined) {
@@ -118,14 +129,20 @@ class Workout extends React.Component {
       <Card>
         <CardHeader>
           {workout.name}
-          <Button
-            color="primary"
-            size="sm"
-            className="float-right"
-            onClick={this.toggleModal}
-          >
-            Add Exercise Activity
-          </Button>
+          <div className="float-right">
+            <Button
+              color="danger"
+              size="sm"
+              className="mr-2"
+              onClick={this.deleteWorkout}
+            >
+              Delete Workout
+            </Button>
+            <Button color="primary" size="sm" onClick={this.toggleModal}>
+              Add Exercise Activity
+            </Button>
+          </div>
+
           <AddExerciseActivityModal
             modal={this.state.modal}
             toggleModal={this.toggleModal}

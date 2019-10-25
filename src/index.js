@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./app.js";
+import App from "./App.js";
 import WorkoutContainer from "./workout/workoutContainer.js";
 import Workout from "./workout/workout.js";
 import "bootstrap/dist/css/bootstrap.min.css";

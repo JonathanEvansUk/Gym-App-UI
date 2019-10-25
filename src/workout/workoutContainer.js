@@ -52,6 +52,8 @@ class WorkoutContainer extends React.Component {
   }
 
   componentDidMount() {
+    console.log("Fetching workouts from server");
+
     fetch("http://localhost:8080/workouts/")
       .then(response => response.json())
       .then(data => this.setState({ workouts: data }))
