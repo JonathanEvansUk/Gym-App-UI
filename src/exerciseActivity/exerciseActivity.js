@@ -14,7 +14,10 @@ class ExerciseActivity extends React.Component {
     this.cancelEdit = this.cancelEdit.bind(this);
     this.deleteExerciseActivity = this.deleteExerciseActivity.bind(this);
     this.saveEdit = this.saveEdit.bind(this);
+
+    this.handleSetTypeEdited = this.handleSetTypeEdited.bind(this);
     this.handleSetRepsEdited = this.handleSetRepsEdited.bind(this);
+    this.handleSetWeightKgEdited = this.handleSetWeightKgEdited.bind(this);
     this.handleSetWeightEdited = this.handleSetWeightEdited.bind(this);
     this.handleSetStatusEdited = this.handleSetStatusEdited.bind(this);
     this.addSet = this.addSet.bind(this);
@@ -82,7 +85,7 @@ class ExerciseActivity extends React.Component {
   }
 
   addSet() {
-    let newSet = {};
+    let newSet = { type: "WeightedSet" };
 
     let updatedSets = this.state.sets.slice();
 
@@ -107,10 +110,28 @@ class ExerciseActivity extends React.Component {
     this.setState({ sets: updatedSets });
   }
 
-  handleSetWeightEdited(event, setIndex) {
+  handleSetTypeEdited(setType, setIndex) {
+    let updatedSet = {
+      ...this.state.sets[setIndex],
+      type: setType
+    };
+
+    this.updateSetAtIndex(updatedSet, setIndex);
+  }
+
+  handleSetWeightKgEdited(event, setIndex) {
     let updatedSet = {
       ...this.state.sets[setIndex],
       weightKg: parseFloat(event.target.value)
+    };
+
+    this.updateSetAtIndex(updatedSet, setIndex);
+  }
+
+  handleSetWeightEdited(event, setIndex) {
+    let updatedSet = {
+      ...this.state.sets[setIndex],
+      weight: event.target.value
     };
 
     this.updateSetAtIndex(updatedSet, setIndex);
@@ -173,6 +194,8 @@ class ExerciseActivity extends React.Component {
         <Sets
           sets={sets}
           editable={this.state.editable}
+          onSetTypeEdited={this.handleSetTypeEdited}
+          onSetWeightKgEdited={this.handleSetWeightKgEdited}
           onSetWeightEdited={this.handleSetWeightEdited}
           onSetRepsEdited={this.handleSetRepsEdited}
           onSetStatusEdited={this.handleSetStatusEdited}
@@ -219,6 +242,8 @@ function Sets(props) {
   const {
     editable,
     sets,
+    onSetTypeEdited,
+    onSetWeightKgEdited,
     onSetWeightEdited,
     onSetRepsEdited,
     onSetStatusEdited,
@@ -231,6 +256,8 @@ function Sets(props) {
         set={set}
         index={index}
         editable={editable}
+        onSetTypeEdited={onSetTypeEdited}
+        onSetWeightKgEdited={onSetWeightKgEdited}
         onSetWeightEdited={onSetWeightEdited}
         onSetRepsEdited={onSetRepsEdited}
         onSetStatusEdited={onSetStatusEdited}

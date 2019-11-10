@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Col, Badge, Form, FormGroup, Label, Input } from "reactstrap";
 import EditableStatus from "./EditableStatus";
+import WeightInput from "./WeightInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -16,10 +17,26 @@ const statusBadgeStyle = {
 class Set extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleSetTypeEdited = this.handleSetTypeEdited.bind(this);
+    this.handleSetWeightKgEdited = this.handleSetWeightKgEdited.bind(this);
     this.handleSetWeightEdited = this.handleSetWeightEdited.bind(this);
     this.handleSetRepsEdited = this.handleSetRepsEdited.bind(this);
     this.handleSetStatusEdited = this.handleSetStatusEdited.bind(this);
     this.handleSetDeleteClicked = this.handleSetDeleteClicked.bind(this);
+
+    // this.state = { setType: this.props.set.type };
+  }
+
+  handleSetTypeEdited(setType) {
+    // console.log(setType);
+    // this.setState({ setType: setType });
+
+    this.props.onSetTypeEdited(setType, this.props.index);
+  }
+
+  handleSetWeightKgEdited(e) {
+    this.props.onSetWeightKgEdited(e, this.props.index);
   }
 
   handleSetWeightEdited(e) {
@@ -73,18 +90,20 @@ class Set extends React.Component {
     const { editable, set, index } = this.props;
     const statusSection = this.renderStatusSection(editable, set.status);
     const deleteSetColumn = this.renderDeleteSetColumn();
+
+    console.log("Rendering set");
     return (
       <Form>
         <FormGroup row>
           <Label xs="auto">{index + 1}</Label>
 
           <Col>
-            <Input
-              name="weight"
-              id="weight"
-              defaultValue={set.weightKg}
-              disabled={!editable}
-              onChange={this.handleSetWeightEdited}
+            <WeightInput
+              set={set}
+              editable={editable}
+              handleSetTypeEdited={this.handleSetTypeEdited}
+              handleSetWeightEdited={this.handleSetWeightEdited}
+              handleSetWeightKgEdited={this.handleSetWeightKgEdited}
             />
           </Col>
 
