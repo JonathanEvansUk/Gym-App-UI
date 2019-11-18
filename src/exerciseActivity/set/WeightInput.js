@@ -1,91 +1,52 @@
 import React from "react";
 
-import {
-  Button,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText
-} from "reactstrap";
+import { Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 
-const setTypeButtonStyle = {
-  outline: "none",
-  boxShadow: "none"
-};
+import SetTypeButtons from "./SetTypeButtons.js";
 
-class WeightInput extends React.Component {
-  constructor(props) {
-    super(props);
+const WeightInput = props => {
+  const editable = props.editable;
+  const set = props.set;
+  const setType = set.type;
 
-    this.handleSetTypeEdited = this.handleSetTypeEdited.bind(this);
-  }
+  return (
+    <InputGroup size="sm" className="flex-nowrap">
+      <SetTypeButtons
+        editable={editable}
+        setType={setType}
+        handleSetTypeEdited={props.handleSetTypeEdited}
+      />
 
-  handleSetTypeEdited(setType) {
-    this.props.handleSetTypeEdited(setType);
-  }
+      {setType === "NonWeightedSet" && (
+        <Input
+          disabled={!editable}
+          value={set.weight}
+          onChange={props.handleSetWeightEdited}
+        />
+      )}
 
-  render() {
-    const editable = this.props.editable;
-    const set = this.props.set;
-    const setType = set.type;
-    return (
-      <InputGroup className="flex-nowrap">
-        <InputGroupAddon addonType="prepend">
-          <Button
-            disabled={!editable}
-            style={setTypeButtonStyle}
-            color="primary"
-            outline={editable || setType !== "NonWeightedSet"}
-            onClick={() => {
-              this.handleSetTypeEdited("NonWeightedSet");
-            }}
-            active={setType === "NonWeightedSet"}
-          >
-            Non
-          </Button>
-          <Button
-            disabled={!editable}
-            style={setTypeButtonStyle}
-            color="primary"
-            outline={editable || setType !== "WeightedSet"}
-            onClick={() => {
-              this.handleSetTypeEdited("WeightedSet");
-            }}
-            active={setType === "WeightedSet"}
-          >
-            Weighted
-          </Button>
-        </InputGroupAddon>
-
-        {setType === "WeightedSet" && (
+      {setType === "WeightedSet" && (
+        <React.Fragment>
           <Input
             disabled={!editable}
             type="number"
             min={0}
             max={200}
             step="0.25"
-            style={{ minWidth: "90px" }}
+            style={{
+              minWidth: "90px"
+            }}
             value={set.weightKg}
-            onChange={this.props.handleSetWeightKgEdited}
+            onChange={props.handleSetWeightKgEdited}
           />
-        )}
 
-        {setType === "NonWeightedSet" && (
-          <Input
-            disabled={!editable}
-            value={set.weight}
-            onChange={this.props.handleSetWeightEdited}
-          />
-        )}
-
-        {setType === "WeightedSet" && (
           <InputGroupAddon addonType="append">
             <InputGroupText>kg</InputGroupText>
           </InputGroupAddon>
-        )}
-      </InputGroup>
-    );
-  }
-}
+        </React.Fragment>
+      )}
+    </InputGroup>
+  );
+};
 
 export default WeightInput;

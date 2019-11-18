@@ -36,10 +36,12 @@ class Set extends React.Component {
   }
 
   handleSetWeightKgEdited(e) {
+    console.log("set weightKg edited: ", e.target.value);
     this.props.onSetWeightKgEdited(e, this.props.index);
   }
 
   handleSetWeightEdited(e) {
+    console.log("set weight edited: ", e.target.value);
     this.props.onSetWeightEdited(e, this.props.index);
   }
 
@@ -95,7 +97,9 @@ class Set extends React.Component {
     return (
       <Form>
         <FormGroup row>
-          <Label xs="auto">{index + 1}</Label>
+          <Label xs="auto" size="sm">
+            {index + 1}
+          </Label>
 
           <Col>
             <WeightInput
@@ -109,6 +113,7 @@ class Set extends React.Component {
 
           <Col>
             <Input
+              bsSize="sm"
               name="reps"
               id="reps"
               defaultValue={set.numberOfReps}

@@ -85,7 +85,7 @@ class ExerciseActivity extends React.Component {
   }
 
   addSet() {
-    let newSet = { type: "WeightedSet" };
+    let newSet = { type: "WeightedSet", weight: "", weightKg: 0 };
 
     let updatedSets = this.state.sets.slice();
 
@@ -111,10 +111,15 @@ class ExerciseActivity extends React.Component {
   }
 
   handleSetTypeEdited(setType, setIndex) {
-    let updatedSet = {
-      ...this.state.sets[setIndex],
-      type: setType
-    };
+    let updatedSet = { ...this.state.sets[setIndex], type: setType };
+
+    if (updatedSet.weight === undefined) {
+      updatedSet.weight = "";
+    }
+
+    if (updatedSet.weightKg === undefined) {
+      updatedSet.weightKg = 0;
+    }
 
     this.updateSetAtIndex(updatedSet, setIndex);
   }
