@@ -43,7 +43,7 @@ class ExerciseActivity extends React.Component {
   }
 
   toggleEdit(event) {
-    event.stopPropagation();
+    //event.stopPropagation();
 
     this.setState({
       editable: true

@@ -24,24 +24,17 @@ class Set extends React.Component {
     this.handleSetRepsEdited = this.handleSetRepsEdited.bind(this);
     this.handleSetStatusEdited = this.handleSetStatusEdited.bind(this);
     this.handleSetDeleteClicked = this.handleSetDeleteClicked.bind(this);
-
-    // this.state = { setType: this.props.set.type };
   }
 
   handleSetTypeEdited(setType) {
-    // console.log(setType);
-    // this.setState({ setType: setType });
-
     this.props.onSetTypeEdited(setType, this.props.index);
   }
 
   handleSetWeightKgEdited(e) {
-    console.log("set weightKg edited: ", e.target.value);
     this.props.onSetWeightKgEdited(e, this.props.index);
   }
 
   handleSetWeightEdited(e) {
-    console.log("set weight edited: ", e.target.value);
     this.props.onSetWeightEdited(e, this.props.index);
   }
 

@@ -7,17 +7,17 @@ import SetTypeButtons from "./SetTypeButtons.js";
 const WeightInput = props => {
   const editable = props.editable;
   const set = props.set;
-  const setType = set.type;
+  const currentSetType = set.type;
 
   return (
     <InputGroup size="sm" className="flex-nowrap">
       <SetTypeButtons
         editable={editable}
-        setType={setType}
+        currentSetType={currentSetType}
         handleSetTypeEdited={props.handleSetTypeEdited}
       />
 
-      {setType === "NonWeightedSet" && (
+      {currentSetType === "NonWeightedSet" && (
         <Input
           disabled={!editable}
           value={set.weight}
@@ -25,7 +25,7 @@ const WeightInput = props => {
         />
       )}
 
-      {setType === "WeightedSet" && (
+      {currentSetType === "WeightedSet" && (
         <React.Fragment>
           <Input
             disabled={!editable}
