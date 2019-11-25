@@ -29,7 +29,8 @@ class AddWorkoutButton extends React.Component {
         <AddWorkoutModal
           toggleModal={this.toggleAddWorkoutModal}
           modal={this.props.modal}
-          addWorkout={this.addWorkout}
+          saveWorkout={this.addWorkout}
+          workoutTypes={this.props.workoutTypes}
         />
       </div>
     );

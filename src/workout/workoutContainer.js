@@ -12,7 +12,8 @@ class WorkoutContainer extends React.Component {
 
     this.state = {
       workouts: [],
-      modal: false
+      modal: false,
+      workoutTypes: []
     };
   }
 
@@ -58,6 +59,14 @@ class WorkoutContainer extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ workouts: data }))
       .catch(console.log);
+
+    fetch("http://localhost:8080/workoutTypes")
+      .then(res => res.json())
+      .then(workoutTypes =>
+        this.setState({
+          workoutTypes: workoutTypes
+        })
+      );
   }
 
   render() {
@@ -69,6 +78,8 @@ class WorkoutContainer extends React.Component {
             toggleAddWorkoutModal={this.toggleAddWorkoutModal}
             modal={this.state.modal}
             addWorkout={this.addWorkout}
+            workoutTypes={this.state.workoutTypes}
+            initialWorkoutType={this.state.workoutTypes[0]}
           />
         </CardHeader>
         <CardBody>

@@ -20,33 +20,28 @@ class AddWorkoutModal extends React.Component {
 
     this.toggleModal = this.toggleModal.bind(this);
     this.handleWorkoutTypeChosen = this.handleWorkoutTypeChosen.bind(this);
-    this.addWorkout = this.addWorkout.bind(this);
+    this.saveWorkout = this.saveWorkout.bind(this);
     this.handleWorkoutNameChanged = this.handleWorkoutNameChanged.bind(this);
     this.handleDateChosen = this.handleDateChosen.bind(this);
 
-    this.state = {};
-  }
+    let startDate =
+      this.props.startDate !== undefined
+        ? new Date(this.props.startDate)
+        : new Date();
 
-  //TODO move this up to parent
-  componentDidMount() {
-    fetch("http://localhost:8080/workoutTypes")
-      .then(res => res.json())
-      .then(workoutTypes =>
-        this.setState({
-          workoutName: "",
-          workoutTypes: workoutTypes,
-          chosenWorkoutType: workoutTypes[0],
-          startDate: new Date()
-        })
-      );
+    this.state = {
+      workoutName: this.props.workoutName || "",
+      chosenWorkoutType: this.props.workoutType,
+      startDate: startDate
+    };
   }
 
   toggleModal() {
     this.props.toggleModal();
   }
 
-  addWorkout() {
-    this.props.addWorkout(
+  saveWorkout() {
+    this.props.saveWorkout(
       this.state.workoutName,
       this.state.chosenWorkoutType,
       this.state.startDate
@@ -70,23 +65,26 @@ class AddWorkoutModal extends React.Component {
   }
 
   renderSelectWorkoutType() {
-    if (this.state.workoutTypes === undefined) {
+    if (this.props.workoutTypes === undefined) {
       return <p>No Workout Types Found</p>;
     }
 
-    let workoutTypeOptions = this.state.workoutTypes.map(workoutType => {
+    let workoutTypeOptions = this.props.workoutTypes.map(workoutType => {
       return <option key={workoutType}>{workoutType}</option>;
     });
 
     return (
-      <Input type="select" onChange={this.handleWorkoutTypeChosen}>
+      <Input
+        type="select"
+        onChange={this.handleWorkoutTypeChosen}
+        value={this.state.chosenWorkoutType}
+      >
         {workoutTypeOptions}
       </Input>
     );
   }
 
   render() {
-    console.log(this.state.workoutTypes);
     return (
       <Modal isOpen={this.props.modal} toggle={this.toggleModal}>
         <ModalHeader>Add Workout</ModalHeader>
@@ -94,7 +92,10 @@ class AddWorkoutModal extends React.Component {
           <Form>
             <FormGroup>
               <Label>Name</Label>
-              <Input onChange={this.handleWorkoutNameChanged} />
+              <Input
+                value={this.state.workoutName}
+                onChange={this.handleWorkoutNameChanged}
+              />
             </FormGroup>
 
             <FormGroup>
@@ -105,6 +106,7 @@ class AddWorkoutModal extends React.Component {
             <FormGroup>
               <Label>Timestamp</Label>
               <DatePicker
+                injectTimes={[this.state.startDate]}
                 selected={this.state.startDate}
                 onChange={this.handleDateChosen}
                 timeIntervals={15}
@@ -119,8 +121,8 @@ class AddWorkoutModal extends React.Component {
           <Button color="secondary" onClick={this.toggleModal}>
             Cancel
           </Button>
-          <Button color="primary" onClick={this.addWorkout}>
-            Add
+          <Button color="primary" onClick={this.saveWorkout}>
+            Save
           </Button>
         </ModalFooter>
       </Modal>

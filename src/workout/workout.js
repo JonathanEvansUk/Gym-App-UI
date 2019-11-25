@@ -4,12 +4,16 @@ import { Button } from "reactstrap";
 
 import { Card, CardHeader, CardBody } from "reactstrap";
 import AddExerciseActivityModal from "../AddExerciseActivityModal.js";
+import AddWorkoutModal from "./AddWorkoutModal.js";
 
 class Workout extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggleModal = this.toggleModal.bind(this);
+    this.toggleAddExerciseActivityModal = this.toggleAddExerciseActivityModal.bind(
+      this
+    );
+    this.toggleEditWorkoutModal = this.toggleEditWorkoutModal.bind(this);
     this.addExerciseActivity = this.addExerciseActivity.bind(this);
     this.addExerciseActivityToWorkout = this.addExerciseActivityToWorkout.bind(
       this
@@ -19,10 +23,13 @@ class Workout extends React.Component {
       this
     );
     this.deleteWorkout = this.deleteWorkout.bind(this);
+    this.editWorkout = this.editWorkout.bind(this);
     this.state = {
       loaded: false,
       workout: undefined,
-      modal: false
+      addExerciseActivityModal: false,
+      editWorkoutModal: false,
+      workoutTypes: []
     };
   }
 
@@ -37,12 +44,44 @@ class Workout extends React.Component {
           workout: result
         });
       });
+
+    fetch("http://localhost:8080/workoutTypes")
+      .then(res => res.json())
+      .then(workoutTypes =>
+        this.setState({
+          workoutTypes: workoutTypes
+        })
+      );
   }
 
-  toggleModal() {
+  toggleAddExerciseActivityModal() {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      addExerciseActivityModal: !prevState.addExerciseActivityModal
     }));
+  }
+
+  toggleEditWorkoutModal() {
+    this.setState(prevState => ({
+      editWorkoutModal: !prevState.editWorkoutModal
+    }));
+  }
+
+  editWorkout(workoutName, workoutType, workoutTime) {
+    let editWorkoutRequest = JSON.stringify({
+      workoutName: workoutName,
+      workoutType: workoutType,
+      performedAtTimestampUtc: workoutTime
+    });
+
+    console.log(editWorkoutRequest);
+
+    fetch("http://localhost:8080/workouts/" + this.state.workout.id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: editWorkoutRequest
+    })
+      .then(res => res.json())
+      .then(workout => this.setState({ workout: workout }));
   }
 
   addExerciseActivity(exercise) {
@@ -138,14 +177,34 @@ class Workout extends React.Component {
             >
               Delete Workout
             </Button>
-            <Button color="primary" size="sm" onClick={this.toggleModal}>
+            <Button
+              size="sm"
+              className="mr-2"
+              onClick={this.toggleEditWorkoutModal}
+            >
+              Edit Workout
+            </Button>
+            <AddWorkoutModal
+              modal={this.state.editWorkoutModal}
+              toggleModal={this.toggleEditWorkoutModal}
+              workoutName={workout.name}
+              workoutType={workout.workoutType}
+              startDate={workout.performedAtTimestampUtc}
+              workoutTypes={this.state.workoutTypes}
+              saveWorkout={this.editWorkout}
+            />
+            <Button
+              color="primary"
+              size="sm"
+              onClick={this.toggleAddExerciseActivityModal}
+            >
               Add Exercise Activity
             </Button>
           </div>
 
           <AddExerciseActivityModal
-            modal={this.state.modal}
-            toggleModal={this.toggleModal}
+            modal={this.state.addExerciseActivityModal}
+            toggleModal={this.toggleAddExerciseActivityModal}
             addExerciseActivity={this.addExerciseActivity}
           />
         </CardHeader>
