@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 class WorkoutTable extends React.Component {
   render() {
-    console.log(this.props.workouts);
     return (
       <Table>
         <thead>
@@ -19,6 +18,10 @@ class WorkoutTable extends React.Component {
         <tbody>{this.renderTableData()}</tbody>
       </Table>
     );
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.workouts !== nextProps.workouts;
   }
 
   renderTableData() {

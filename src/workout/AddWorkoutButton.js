@@ -7,17 +7,12 @@ class AddWorkoutButton extends React.Component {
     super(props);
 
     this.toggleAddWorkoutModal = this.toggleAddWorkoutModal.bind(this);
-    this.addWorkout = this.addWorkout.bind(this);
 
     this.state = {};
   }
 
   toggleAddWorkoutModal() {
     this.props.toggleAddWorkoutModal();
-  }
-
-  addWorkout(workoutName, workoutType, workoutTime) {
-    this.props.addWorkout(workoutName, workoutType, workoutTime);
   }
 
   render() {
@@ -29,8 +24,14 @@ class AddWorkoutButton extends React.Component {
         <AddWorkoutModal
           toggleModal={this.toggleAddWorkoutModal}
           modal={this.props.modal}
-          saveWorkout={this.addWorkout}
+          saveWorkout={this.props.addWorkout}
           workoutTypes={this.props.workoutTypes}
+          performedAtTimestampUtc={this.props.performedAtTimestampUtc}
+          handleWorkoutNameEdited={this.props.handleNewWorkoutNameEdited}
+          handleWorkoutTypeEdited={this.props.handleNewWorkoutTypeEdited}
+          handleWorkoutTimestampEdited={
+            this.props.handleNewWorkoutTimestampEdited
+          }
         />
       </div>
     );

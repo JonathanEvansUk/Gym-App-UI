@@ -9,11 +9,25 @@ class WorkoutContainer extends React.Component {
 
     this.toggleAddWorkoutModal = this.toggleAddWorkoutModal.bind(this);
     this.addWorkout = this.addWorkout.bind(this);
+    this.handleNewWorkoutNameEdited = this.handleNewWorkoutNameEdited.bind(
+      this
+    );
+    this.handleNewWorkoutTypeEdited = this.handleNewWorkoutTypeEdited.bind(
+      this
+    );
+    this.handleNewWorkoutTimestampEdited = this.handleNewWorkoutTimestampEdited.bind(
+      this
+    );
 
     this.state = {
       workouts: [],
       modal: false,
-      workoutTypes: []
+      workoutTypes: [],
+      newWorkout: {
+        workoutName: "",
+        workoutType: undefined,
+        performedAtTimestampUtc: new Date()
+      }
     };
   }
 
@@ -27,7 +41,12 @@ class WorkoutContainer extends React.Component {
     if (res.status === 200) {
       res.json().then(res =>
         this.setState({
-          workouts: [...this.state.workouts, res]
+          workouts: [...this.state.workouts, res],
+          newWorkout: {
+            workoutName: "",
+            workoutType: this.state.workoutTypes[0],
+            performedAtTimestampUtc: new Date()
+          }
         })
       );
     } else if (res.status === 400) {
@@ -38,12 +57,31 @@ class WorkoutContainer extends React.Component {
     }
   }
 
-  addWorkout(workoutName, workoutType, workoutTime) {
-    let createWorkoutJson = JSON.stringify({
-      workoutName: workoutName,
-      workoutType: workoutType,
-      performedAtTimestampUtc: workoutTime
-    });
+  handleNewWorkoutNameEdited(event) {
+    event.persist();
+    this.setState(prevState => ({
+      newWorkout: { ...prevState.newWorkout, workoutName: event.target.value }
+    }));
+  }
+
+  handleNewWorkoutTypeEdited(event) {
+    event.persist();
+    this.setState(prevState => ({
+      newWorkout: { ...prevState.newWorkout, workoutType: event.target.value }
+    }));
+  }
+
+  handleNewWorkoutTimestampEdited(timestamp) {
+    this.setState(prevState => ({
+      newWorkout: {
+        ...prevState.newWorkout,
+        performedAtTimestampUtc: timestamp
+      }
+    }));
+  }
+
+  addWorkout() {
+    let createWorkoutJson = JSON.stringify(this.state.newWorkout);
 
     fetch("http://localhost:8080/workouts/", {
       method: "POST",
@@ -63,9 +101,13 @@ class WorkoutContainer extends React.Component {
     fetch("http://localhost:8080/workoutTypes")
       .then(res => res.json())
       .then(workoutTypes =>
-        this.setState({
-          workoutTypes: workoutTypes
-        })
+        this.setState(prevState => ({
+          workoutTypes: workoutTypes,
+          newWorkout: {
+            ...prevState.newWorkout,
+            workoutType: workoutTypes[0]
+          }
+        }))
       );
   }
 
@@ -78,8 +120,16 @@ class WorkoutContainer extends React.Component {
             toggleAddWorkoutModal={this.toggleAddWorkoutModal}
             modal={this.state.modal}
             addWorkout={this.addWorkout}
+            handleNewWorkoutNameEdited={this.handleNewWorkoutNameEdited}
+            handleNewWorkoutTypeEdited={this.handleNewWorkoutTypeEdited}
+            handleNewWorkoutTimestampEdited={
+              this.handleNewWorkoutTimestampEdited
+            }
             workoutTypes={this.state.workoutTypes}
             initialWorkoutType={this.state.workoutTypes[0]}
+            performedAtTimestampUtc={
+              this.state.newWorkout.performedAtTimestampUtc
+            }
           />
         </CardHeader>
         <CardBody>

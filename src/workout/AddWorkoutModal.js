@@ -19,21 +19,9 @@ class AddWorkoutModal extends React.Component {
     super(props);
 
     this.toggleModal = this.toggleModal.bind(this);
-    this.handleWorkoutTypeChosen = this.handleWorkoutTypeChosen.bind(this);
     this.saveWorkout = this.saveWorkout.bind(this);
-    this.handleWorkoutNameChanged = this.handleWorkoutNameChanged.bind(this);
+
     this.handleDateChosen = this.handleDateChosen.bind(this);
-
-    let startDate =
-      this.props.startDate !== undefined
-        ? new Date(this.props.startDate)
-        : new Date();
-
-    this.state = {
-      workoutName: this.props.workoutName || "",
-      chosenWorkoutType: this.props.workoutType,
-      startDate: startDate
-    };
   }
 
   toggleModal() {
@@ -41,27 +29,15 @@ class AddWorkoutModal extends React.Component {
   }
 
   saveWorkout() {
-    this.props.saveWorkout(
-      this.state.workoutName,
-      this.state.chosenWorkoutType,
-      this.state.startDate
-    );
+    this.props.saveWorkout();
 
     this.props.toggleModal();
   }
 
-  handleWorkoutNameChanged(event) {
-    this.setState({ workoutName: event.target.value });
-  }
-
-  handleWorkoutTypeChosen(event) {
-    this.setState({ chosenWorkoutType: event.target.value });
-  }
-
   handleDateChosen(date) {
-    this.setState({ startDate: date });
-
     console.log(date);
+
+    this.props.handleWorkoutTimestampEdited(date);
   }
 
   renderSelectWorkoutType() {
@@ -76,8 +52,8 @@ class AddWorkoutModal extends React.Component {
     return (
       <Input
         type="select"
-        onChange={this.handleWorkoutTypeChosen}
-        value={this.state.chosenWorkoutType}
+        onChange={this.props.handleWorkoutTypeEdited}
+        value={this.props.chosenWorkoutType}
       >
         {workoutTypeOptions}
       </Input>
@@ -93,8 +69,8 @@ class AddWorkoutModal extends React.Component {
             <FormGroup>
               <Label>Name</Label>
               <Input
-                value={this.state.workoutName}
-                onChange={this.handleWorkoutNameChanged}
+                value={this.props.workoutName}
+                onChange={this.props.handleWorkoutNameEdited}
               />
             </FormGroup>
 
@@ -106,8 +82,8 @@ class AddWorkoutModal extends React.Component {
             <FormGroup>
               <Label>Timestamp</Label>
               <DatePicker
-                injectTimes={[this.state.startDate]}
-                selected={this.state.startDate}
+                injectTimes={[this.props.performedAtTimestampUtc]}
+                selected={this.props.performedAtTimestampUtc}
                 onChange={this.handleDateChosen}
                 timeIntervals={15}
                 showTimeSelect

@@ -23,13 +23,21 @@ class Workout extends React.Component {
       this
     );
     this.deleteWorkout = this.deleteWorkout.bind(this);
+
+    this.handleWorkoutNameEdited = this.handleWorkoutNameEdited.bind(this);
+    this.handleWorkoutTypeEdited = this.handleWorkoutTypeEdited.bind(this);
+    this.handleWorkoutTimestampEdited = this.handleWorkoutTimestampEdited.bind(
+      this
+    );
+
     this.editWorkout = this.editWorkout.bind(this);
     this.state = {
       loaded: false,
       workout: undefined,
       addExerciseActivityModal: false,
       editWorkoutModal: false,
-      workoutTypes: []
+      workoutTypes: [],
+      newWorkout: {}
     };
   }
 
@@ -41,7 +49,12 @@ class Workout extends React.Component {
       .then(result => {
         this.setState({
           loaded: true,
-          workout: result
+          workout: result,
+          newWorkout: {
+            workoutName: result.name,
+            workoutType: result.workoutType,
+            performedAtTimestampUtc: result.performedAtTimestampUtc
+          }
         });
       });
 
@@ -66,12 +79,33 @@ class Workout extends React.Component {
     }));
   }
 
-  editWorkout(workoutName, workoutType, workoutTime) {
-    let editWorkoutRequest = JSON.stringify({
-      workoutName: workoutName,
-      workoutType: workoutType,
-      performedAtTimestampUtc: workoutTime
-    });
+  handleWorkoutNameEdited(event) {
+    event.persist();
+
+    this.setState(prevState => ({
+      newWorkout: { ...prevState.newWorkout, workoutName: event.target.value }
+    }));
+  }
+
+  handleWorkoutTypeEdited(event) {
+    event.persist();
+
+    this.setState(prevState => ({
+      newWorkout: { ...prevState.newWorkout, workoutType: event.target.value }
+    }));
+  }
+
+  handleWorkoutTimestampEdited(timestamp) {
+    this.setState(prevState => ({
+      newWorkout: {
+        ...prevState.newWorkout,
+        performedAtTimestampUtc: timestamp
+      }
+    }));
+  }
+
+  editWorkout() {
+    let editWorkoutRequest = JSON.stringify(this.state.newWorkout);
 
     console.log(editWorkoutRequest);
 
@@ -152,7 +186,6 @@ class Workout extends React.Component {
   deleteWorkout() {
     const { id } = this.props.match.params;
 
-    //TODO remove console log, and redirect to workout list
     fetch("http://localhost:8080/workouts/" + id, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" }
@@ -187,11 +220,16 @@ class Workout extends React.Component {
             <AddWorkoutModal
               modal={this.state.editWorkoutModal}
               toggleModal={this.toggleEditWorkoutModal}
-              workoutName={workout.name}
-              workoutType={workout.workoutType}
-              startDate={workout.performedAtTimestampUtc}
+              workoutName={this.state.newWorkout.workoutName}
+              chosenWorkoutType={this.state.newWorkout.workoutType}
+              performedAtTimestampUtc={
+                new Date(this.state.newWorkout.performedAtTimestampUtc)
+              }
               workoutTypes={this.state.workoutTypes}
               saveWorkout={this.editWorkout}
+              handleWorkoutNameEdited={this.handleWorkoutNameEdited}
+              handleWorkoutTypeEdited={this.handleWorkoutTypeEdited}
+              handleWorkoutTimestampEdited={this.handleWorkoutTimestampEdited}
             />
             <Button
               color="primary"
