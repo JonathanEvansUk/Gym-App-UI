@@ -220,11 +220,7 @@ class Workout extends React.Component {
             <AddWorkoutModal
               modal={this.state.editWorkoutModal}
               toggleModal={this.toggleEditWorkoutModal}
-              workoutName={this.state.newWorkout.workoutName}
-              chosenWorkoutType={this.state.newWorkout.workoutType}
-              performedAtTimestampUtc={
-                new Date(this.state.newWorkout.performedAtTimestampUtc)
-              }
+              newWorkout={this.state.newWorkout}
               workoutTypes={this.state.workoutTypes}
               saveWorkout={this.editWorkout}
               handleWorkoutNameEdited={this.handleWorkoutNameEdited}

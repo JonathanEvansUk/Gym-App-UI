@@ -25,8 +25,8 @@ class AddWorkoutButton extends React.Component {
           toggleModal={this.toggleAddWorkoutModal}
           modal={this.props.modal}
           saveWorkout={this.props.addWorkout}
+          newWorkout={this.props.newWorkout}
           workoutTypes={this.props.workoutTypes}
-          performedAtTimestampUtc={this.props.performedAtTimestampUtc}
           handleWorkoutNameEdited={this.props.handleNewWorkoutNameEdited}
           handleWorkoutTypeEdited={this.props.handleNewWorkoutTypeEdited}
           handleWorkoutTimestampEdited={

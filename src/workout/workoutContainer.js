@@ -125,6 +125,7 @@ class WorkoutContainer extends React.Component {
             handleNewWorkoutTimestampEdited={
               this.handleNewWorkoutTimestampEdited
             }
+            newWorkout={this.state.newWorkout}
             workoutTypes={this.state.workoutTypes}
             initialWorkoutType={this.state.workoutTypes[0]}
             performedAtTimestampUtc={
