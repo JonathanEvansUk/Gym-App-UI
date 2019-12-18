@@ -147,14 +147,14 @@ class Workout extends React.Component {
     this.setState({ workout: updatedWorkout });
   }
 
-  deleteExerciseActivity(exerciseAtivityId) {
+  deleteExerciseActivity(exerciseActivityId) {
     const { id } = this.props.match.params;
 
     fetch(
       "http://localhost:8080/workouts/" +
         id +
         "/exerciseActivity/" +
-        exerciseAtivityId,
+        exerciseActivityId,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" }
