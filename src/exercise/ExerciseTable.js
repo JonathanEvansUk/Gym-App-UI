@@ -18,11 +18,7 @@ const ExerciseTable = props => (
           <td>{exercise.name}</td>
           <td>{exercise.muscleGroup}</td>
           <td>
-            <Link
-              to={{
-                pathname: exercise.id
-              }}
-            >
+            <Link to={"/exercises/" + exercise.id}>
               <Button size="sm">View Exercise</Button>
             </Link>
           </td>

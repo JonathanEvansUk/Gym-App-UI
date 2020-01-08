@@ -45,11 +45,7 @@ class WorkoutTable extends React.Component {
 
   renderWorkoutButton(workout) {
     return (
-      <Link
-        to={{
-          pathname: workout.id
-        }}
-      >
+      <Link to={"/workouts/" + workout.id}>
         <Button>View Workout</Button>
       </Link>
     );

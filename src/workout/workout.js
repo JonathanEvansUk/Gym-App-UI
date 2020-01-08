@@ -2,7 +2,7 @@ import React from "react";
 import ExerciseActivity from "../exerciseActivity/exerciseActivity.js";
 import { Button } from "reactstrap";
 
-import { Card, CardHeader, CardBody } from "reactstrap";
+import { Container, Card, CardHeader, CardBody } from "reactstrap";
 import AddExerciseActivityModal from "../AddExerciseActivityModal.js";
 import AddWorkoutModal from "./AddWorkoutModal.js";
 
@@ -198,53 +198,55 @@ class Workout extends React.Component {
       return <h1>Loading...</h1>;
     }
     return (
-      <Card>
-        <CardHeader>
-          {workout.name}
-          <div className="float-right">
-            <Button
-              color="danger"
-              size="sm"
-              className="mr-2"
-              onClick={this.deleteWorkout}
-            >
-              Delete Workout
-            </Button>
-            <Button
-              size="sm"
-              className="mr-2"
-              onClick={this.toggleEditWorkoutModal}
-            >
-              Edit Workout
-            </Button>
-            <AddWorkoutModal
-              modal={this.state.editWorkoutModal}
-              toggleModal={this.toggleEditWorkoutModal}
-              newWorkout={this.state.newWorkout}
-              workoutTypes={this.state.workoutTypes}
-              saveWorkout={this.editWorkout}
-              handleWorkoutNameEdited={this.handleWorkoutNameEdited}
-              handleWorkoutTypeEdited={this.handleWorkoutTypeEdited}
-              handleWorkoutTimestampEdited={this.handleWorkoutTimestampEdited}
+      <Container fluid>
+        <Card>
+          <CardHeader>
+            {workout.name}
+            <div className="float-right">
+              <Button
+                color="danger"
+                size="sm"
+                className="mr-2"
+                onClick={this.deleteWorkout}
+              >
+                Delete Workout
+              </Button>
+              <Button
+                size="sm"
+                className="mr-2"
+                onClick={this.toggleEditWorkoutModal}
+              >
+                Edit Workout
+              </Button>
+              <AddWorkoutModal
+                modal={this.state.editWorkoutModal}
+                toggleModal={this.toggleEditWorkoutModal}
+                newWorkout={this.state.newWorkout}
+                workoutTypes={this.state.workoutTypes}
+                saveWorkout={this.editWorkout}
+                handleWorkoutNameEdited={this.handleWorkoutNameEdited}
+                handleWorkoutTypeEdited={this.handleWorkoutTypeEdited}
+                handleWorkoutTimestampEdited={this.handleWorkoutTimestampEdited}
+              />
+              <Button
+                color="primary"
+                size="sm"
+                onClick={this.toggleAddExerciseActivityModal}
+              >
+                Add Exercise Activity
+              </Button>
+            </div>
+
+            <AddExerciseActivityModal
+              modal={this.state.addExerciseActivityModal}
+              toggleModal={this.toggleAddExerciseActivityModal}
+              addExerciseActivity={this.addExerciseActivity}
             />
-            <Button
-              color="primary"
-              size="sm"
-              onClick={this.toggleAddExerciseActivityModal}
-            >
-              Add Exercise Activity
-            </Button>
-          </div>
+          </CardHeader>
 
-          <AddExerciseActivityModal
-            modal={this.state.addExerciseActivityModal}
-            toggleModal={this.toggleAddExerciseActivityModal}
-            addExerciseActivity={this.addExerciseActivity}
-          />
-        </CardHeader>
-
-        <CardBody>{this.renderExerciseActivity(workout)}</CardBody>
-      </Card>
+          <CardBody>{this.renderExerciseActivity(workout)}</CardBody>
+        </Card>
+      </Container>
     );
   }
 

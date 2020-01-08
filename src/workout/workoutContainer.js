@@ -1,6 +1,6 @@
 import React from "react";
 import WorkoutTable from "./WorkoutTable.js";
-import { Card, CardHeader, CardBody, CardText } from "reactstrap";
+import { Container, Card, CardHeader, CardBody, CardText } from "reactstrap";
 import AddWorkoutButton from "./AddWorkoutButton.js";
 
 class WorkoutContainer extends React.Component {
@@ -113,31 +113,33 @@ class WorkoutContainer extends React.Component {
 
   render() {
     return (
-      <Card>
-        <CardHeader>
-          Workouts
-          <AddWorkoutButton
-            toggleAddWorkoutModal={this.toggleAddWorkoutModal}
-            modal={this.state.modal}
-            addWorkout={this.addWorkout}
-            handleNewWorkoutNameEdited={this.handleNewWorkoutNameEdited}
-            handleNewWorkoutTypeEdited={this.handleNewWorkoutTypeEdited}
-            handleNewWorkoutTimestampEdited={
-              this.handleNewWorkoutTimestampEdited
-            }
-            newWorkout={this.state.newWorkout}
-            workoutTypes={this.state.workoutTypes}
-            initialWorkoutType={this.state.workoutTypes[0]}
-            performedAtTimestampUtc={
-              this.state.newWorkout.performedAtTimestampUtc
-            }
-          />
-        </CardHeader>
-        <CardBody>
-          <CardText>Card Text</CardText>
-          <WorkoutTable workouts={this.state.workouts} />
-        </CardBody>
-      </Card>
+      <Container fluid>
+        <Card>
+          <CardHeader>
+            Workouts
+            <AddWorkoutButton
+              toggleAddWorkoutModal={this.toggleAddWorkoutModal}
+              modal={this.state.modal}
+              addWorkout={this.addWorkout}
+              handleNewWorkoutNameEdited={this.handleNewWorkoutNameEdited}
+              handleNewWorkoutTypeEdited={this.handleNewWorkoutTypeEdited}
+              handleNewWorkoutTimestampEdited={
+                this.handleNewWorkoutTimestampEdited
+              }
+              newWorkout={this.state.newWorkout}
+              workoutTypes={this.state.workoutTypes}
+              initialWorkoutType={this.state.workoutTypes[0]}
+              performedAtTimestampUtc={
+                this.state.newWorkout.performedAtTimestampUtc
+              }
+            />
+          </CardHeader>
+          <CardBody>
+            <CardText>Card Text</CardText>
+            <WorkoutTable workouts={this.state.workouts} />
+          </CardBody>
+        </Card>
+      </Container>
     );
   }
 }
