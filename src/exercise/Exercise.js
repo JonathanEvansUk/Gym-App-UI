@@ -1,17 +1,31 @@
 import React from "react";
 
 import { Card, CardHeader, CardBody, Badge } from "reactstrap";
+import Metrics from "./Metrics";
 
 class Exercise extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { exercise: undefined, loading: true, notFound: false };
+    this.state = {
+      exercise: undefined,
+      loading: true,
+      notFound: false,
+      metrics: undefined
+    };
   }
 
   componentDidMount() {
     fetch("http://localhost:8080/exercises/" + this.props.match.params.id).then(
       res => this.handleResponse(res)
     );
+
+    fetch(
+      "http://localhost:8080/exercises/" +
+        this.props.match.params.id +
+        "/metrics"
+    )
+      .then(res => res.json())
+      .then(metrics => this.setState({ metrics: metrics }));
   }
 
   handleResponse(response) {
@@ -43,7 +57,9 @@ class Exercise extends React.Component {
           <Badge className="float-right">{exercise.muscleGroup}</Badge>
         </CardHeader>
 
-        <CardBody>{exercise.information}</CardBody>
+        <CardBody>
+          <Metrics metrics={this.state.metrics} />
+        </CardBody>
       </Card>
     );
   }

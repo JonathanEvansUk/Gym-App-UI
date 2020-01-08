@@ -108,7 +108,6 @@ class Set extends React.Component {
             <Input
               bsSize="sm"
               name="reps"
-              id="reps"
               defaultValue={set.numberOfReps}
               disabled={!editable}
               onChange={this.handleSetRepsEdited}
