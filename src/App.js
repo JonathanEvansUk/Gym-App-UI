@@ -1,6 +1,5 @@
 import React from "react";
 import WorkoutContainer from "./workout/workoutContainer.js";
-import { Container } from "reactstrap";
 
 class App extends React.Component {
   constructor(props) {
@@ -8,11 +7,7 @@ class App extends React.Component {
     this.state = { username: "" };
   }
   render() {
-    return (
-      <Container>
-        <WorkoutContainer />
-      </Container>
-    );
+    return <WorkoutContainer />;
   }
 }
 export default App;

@@ -1,6 +1,6 @@
 import React from "react";
 import WorkoutTable from "./WorkoutTable.js";
-import { Container, Card, CardHeader, CardBody, CardText } from "reactstrap";
+import { Container, Card, CardHeader } from "reactstrap";
 import AddWorkoutButton from "./AddWorkoutButton.js";
 
 class WorkoutContainer extends React.Component {
@@ -134,10 +134,8 @@ class WorkoutContainer extends React.Component {
               }
             />
           </CardHeader>
-          <CardBody>
-            <CardText>Card Text</CardText>
-            <WorkoutTable workouts={this.state.workouts} />
-          </CardBody>
+
+          <WorkoutTable workouts={this.state.workouts} />
         </Card>
       </Container>
     );

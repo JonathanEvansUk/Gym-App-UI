@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 class WorkoutTable extends React.Component {
   render() {
     return (
-      <Table>
+      <Table className="mb-0">
         <thead>
           <tr>
             <th>Name</th>

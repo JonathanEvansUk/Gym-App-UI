@@ -9,6 +9,7 @@ const ExerciseTable = props => (
         <th>ID</th>
         <th>Name</th>
         <th>Muscle Group</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
