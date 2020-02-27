@@ -46,7 +46,7 @@ class WorkoutTable extends React.Component {
   renderWorkoutButton(workout) {
     return (
       <Link to={"/workouts/" + workout.id}>
-        <Button>View Workout</Button>
+        <Button size="sm">View Workout</Button>
       </Link>
     );
   }

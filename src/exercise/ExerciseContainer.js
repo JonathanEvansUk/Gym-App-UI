@@ -1,5 +1,6 @@
 import React from "react";
 import ExerciseTable from "./ExerciseTable.js";
+import { Card, Container } from "reactstrap";
 
 class ExerciseContainer extends React.Component {
   constructor(props) {
@@ -17,7 +18,13 @@ class ExerciseContainer extends React.Component {
   }
 
   render() {
-    return <ExerciseTable exercises={this.state.exercises} />;
+    return (
+      <Container>
+        <Card>
+          <ExerciseTable exercises={this.state.exercises} />
+        </Card>
+      </Container>
+    );
   }
 }
 
