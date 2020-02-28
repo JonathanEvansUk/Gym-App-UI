@@ -7,7 +7,7 @@ class App extends React.Component {
     this.state = { username: "" };
   }
   render() {
-    return <WorkoutContainer />;
+    return "Welcome to the gym app";
   }
 }
 export default App;
