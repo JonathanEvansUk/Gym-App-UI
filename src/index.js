@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App.js";
+import Welcome from "./Welcome.js";
 import WorkoutContainer from "./workout/workoutContainer.js";
 import Workout from "./workout/workout.js";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,7 +14,7 @@ ReactDOM.render(
   <Router>
     <MyNavbar />
     <Switch>
-      <Route path="/" exact component={App} />
+      <Route path="/" exact component={Welcome} />
       <Route path="/workouts" exact component={WorkoutContainer} />
       <Route path="/workouts/:id" component={Workout} />
       <Route path="/exercises/" exact component={ExerciseContainer} />
