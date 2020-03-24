@@ -70,14 +70,6 @@ class AddWorkoutModal extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label>Name</Label>
-              <Input
-                value={this.props.newWorkout.workoutName}
-                onChange={this.props.handleWorkoutNameEdited}
-              />
-            </FormGroup>
-
-            <FormGroup>
               <Label>Workout Type</Label>
               {this.renderSelectWorkoutType()}
             </FormGroup>

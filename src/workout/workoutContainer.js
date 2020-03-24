@@ -9,9 +9,6 @@ class WorkoutContainer extends React.Component {
 
     this.toggleAddWorkoutModal = this.toggleAddWorkoutModal.bind(this);
     this.addWorkout = this.addWorkout.bind(this);
-    this.handleNewWorkoutNameEdited = this.handleNewWorkoutNameEdited.bind(
-      this
-    );
     this.handleNewWorkoutTypeEdited = this.handleNewWorkoutTypeEdited.bind(
       this
     );
@@ -24,7 +21,6 @@ class WorkoutContainer extends React.Component {
       modal: false,
       workoutTypes: [],
       newWorkout: {
-        workoutName: "",
         workoutType: undefined,
         performedAtTimestampUtc: new Date()
       }
@@ -43,7 +39,6 @@ class WorkoutContainer extends React.Component {
         this.setState({
           workouts: [...this.state.workouts, res],
           newWorkout: {
-            workoutName: "",
             workoutType: this.state.workoutTypes[0],
             performedAtTimestampUtc: new Date()
           }
@@ -55,13 +50,6 @@ class WorkoutContainer extends React.Component {
         console.log(res);
       });
     }
-  }
-
-  handleNewWorkoutNameEdited(event) {
-    event.persist();
-    this.setState(prevState => ({
-      newWorkout: { ...prevState.newWorkout, workoutName: event.target.value }
-    }));
   }
 
   handleNewWorkoutTypeEdited(event) {
@@ -121,7 +109,6 @@ class WorkoutContainer extends React.Component {
               toggleAddWorkoutModal={this.toggleAddWorkoutModal}
               modal={this.state.modal}
               addWorkout={this.addWorkout}
-              handleNewWorkoutNameEdited={this.handleNewWorkoutNameEdited}
               handleNewWorkoutTypeEdited={this.handleNewWorkoutTypeEdited}
               handleNewWorkoutTimestampEdited={
                 this.handleNewWorkoutTimestampEdited

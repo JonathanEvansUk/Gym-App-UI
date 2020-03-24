@@ -8,7 +8,7 @@ class WorkoutTable extends React.Component {
       <Table className="mb-0">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Date</th>
             <th>Workout Type</th>
             <th>Exercises</th>
             <th></th>
@@ -26,9 +26,14 @@ class WorkoutTable extends React.Component {
 
   renderTableData() {
     return this.props.workouts.map((workout, index) => {
+      let dateString = Intl.DateTimeFormat("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "2-digit"
+      }).format(new Date(workout.performedAtTimestampUtc));
       return (
         <tr key={index}>
-          <td>{workout.name}</td>
+          <td>{dateString}</td>
           <td>{workout.workoutType}</td>
           <td>{this.renderExercisesList(workout.exerciseActivities)}</td>
           <td>{this.renderWorkoutButton(workout)}</td>

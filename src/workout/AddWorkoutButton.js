@@ -27,7 +27,6 @@ class AddWorkoutButton extends React.Component {
           saveWorkout={this.props.addWorkout}
           newWorkout={this.props.newWorkout}
           workoutTypes={this.props.workoutTypes}
-          handleWorkoutNameEdited={this.props.handleNewWorkoutNameEdited}
           handleWorkoutTypeEdited={this.props.handleNewWorkoutTypeEdited}
           handleWorkoutTimestampEdited={
             this.props.handleNewWorkoutTimestampEdited

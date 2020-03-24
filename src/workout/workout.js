@@ -24,7 +24,6 @@ class Workout extends React.Component {
     );
     this.deleteWorkout = this.deleteWorkout.bind(this);
 
-    this.handleWorkoutNameEdited = this.handleWorkoutNameEdited.bind(this);
     this.handleWorkoutTypeEdited = this.handleWorkoutTypeEdited.bind(this);
     this.handleWorkoutTimestampEdited = this.handleWorkoutTimestampEdited.bind(
       this
@@ -51,7 +50,6 @@ class Workout extends React.Component {
           loaded: true,
           workout: result,
           newWorkout: {
-            workoutName: result.name,
             workoutType: result.workoutType,
             performedAtTimestampUtc: result.performedAtTimestampUtc
           }
@@ -76,14 +74,6 @@ class Workout extends React.Component {
   toggleEditWorkoutModal() {
     this.setState(prevState => ({
       editWorkoutModal: !prevState.editWorkoutModal
-    }));
-  }
-
-  handleWorkoutNameEdited(event) {
-    event.persist();
-
-    this.setState(prevState => ({
-      newWorkout: { ...prevState.newWorkout, workoutName: event.target.value }
     }));
   }
 
@@ -201,7 +191,7 @@ class Workout extends React.Component {
       <Container fluid>
         <Card>
           <CardHeader>
-            {workout.name}
+            {workout.performedAtTimestampUtc}
             <div className="float-right">
               <Button
                 color="danger"
@@ -224,7 +214,6 @@ class Workout extends React.Component {
                 newWorkout={this.state.newWorkout}
                 workoutTypes={this.state.workoutTypes}
                 saveWorkout={this.editWorkout}
-                handleWorkoutNameEdited={this.handleWorkoutNameEdited}
                 handleWorkoutTypeEdited={this.handleWorkoutTypeEdited}
                 handleWorkoutTimestampEdited={this.handleWorkoutTimestampEdited}
               />
