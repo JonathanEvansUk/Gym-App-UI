@@ -2,6 +2,12 @@ import React from "react";
 import { Table, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 
+const shortDateFormat = Intl.DateTimeFormat("en-GB", {
+  year: "numeric",
+  month: "long",
+  day: "2-digit"
+});
+
 class WorkoutTable extends React.Component {
   render() {
     return (
@@ -26,11 +32,9 @@ class WorkoutTable extends React.Component {
 
   renderTableData() {
     return this.props.workouts.map((workout, index) => {
-      let dateString = Intl.DateTimeFormat("en-GB", {
-        year: "numeric",
-        month: "long",
-        day: "2-digit"
-      }).format(new Date(workout.performedAtTimestampUtc));
+      let dateString = shortDateFormat.format(
+        new Date(workout.performedAtTimestampUtc)
+      );
       return (
         <tr key={index}>
           <td>{dateString}</td>

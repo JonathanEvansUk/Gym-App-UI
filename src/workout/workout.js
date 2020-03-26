@@ -6,6 +6,16 @@ import { Container, Card, CardHeader, CardBody } from "reactstrap";
 import AddExerciseActivityModal from "../AddExerciseActivityModal.js";
 import AddWorkoutModal from "./AddWorkoutModal.js";
 
+const fullDateFormat = Intl.DateTimeFormat("en-GB", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "2-digit",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric"
+});
+
 class Workout extends React.Component {
   constructor(props) {
     super(props);
@@ -179,7 +189,7 @@ class Workout extends React.Component {
     fetch("http://localhost:8080/workouts/" + id, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" }
-    }).then(res => this.props.history.push("/workouts/"));
+    }).then(res => this.props.history.push("/workouts"));
   }
 
   render() {
@@ -187,11 +197,15 @@ class Workout extends React.Component {
     if (workout === undefined) {
       return <h1>Loading...</h1>;
     }
+
+    let dateString = fullDateFormat.format(
+      new Date(workout.performedAtTimestampUtc)
+    );
     return (
       <Container fluid>
         <Card>
           <CardHeader>
-            {workout.performedAtTimestampUtc}
+            {dateString}
             <div className="float-right">
               <Button
                 color="danger"
