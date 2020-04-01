@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap4-card-tables/dist/bootstrap4-card-tables.min.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ExerciseContainer from "./exercise/ExerciseContainer.js";
-import Exercise from "./exercise/Exercise.js";
+import ExerciseFetcher from "./exercise/ExerciseFetcher.js";
 import MyNavbar from "./navbar.js";
 
 ReactDOM.render(
@@ -18,7 +18,7 @@ ReactDOM.render(
       <Route path="/workouts" exact component={WorkoutContainer} />
       <Route path="/workouts/:id" component={Workout} />
       <Route path="/exercises/" exact component={ExerciseContainer} />
-      <Route path="/exercises/:id" component={Exercise} />
+      <Route path="/exercises/:id" component={ExerciseFetcher} />
     </Switch>
   </Router>,
   document.getElementById("root")

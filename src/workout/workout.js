@@ -41,8 +41,9 @@ class Workout extends React.Component {
 
     this.editWorkout = this.editWorkout.bind(this);
     this.state = {
-      loaded: false,
       workout: undefined,
+      loading: true,
+      notFound: false,
       addExerciseActivityModal: false,
       editWorkoutModal: false,
       workoutTypes: [],
@@ -50,21 +51,30 @@ class Workout extends React.Component {
     };
   }
 
+  handleFetchWorkoutResponse(response) {
+    if (response.status === 200) {
+      response.json().then(workout =>
+        this.setState({
+          workout: workout,
+          loading: false,
+          newWorkout: {
+            workoutType: workout.workoutType,
+            performedAtTimestampUtc: workout.performedAtTimestampUtc
+          }
+        })
+      );
+    } else if (response.status === 404) {
+      this.setState({ loading: false, notFound: true });
+    }
+  }
+
   componentDidMount() {
     const { id } = this.props.match.params;
 
-    fetch("http://localhost:8080/workouts/" + id)
-      .then(res => res.json())
-      .then(result => {
-        this.setState({
-          loaded: true,
-          workout: result,
-          newWorkout: {
-            workoutType: result.workoutType,
-            performedAtTimestampUtc: result.performedAtTimestampUtc
-          }
-        });
-      });
+    // TODO these calls should be consolidated
+    fetch("http://localhost:8080/workouts/" + id).then(response =>
+      this.handleFetchWorkoutResponse(response)
+    );
 
     fetch("http://localhost:8080/workoutTypes")
       .then(res => res.json())
@@ -193,10 +203,15 @@ class Workout extends React.Component {
   }
 
   render() {
-    const { workout } = this.state;
-    if (workout === undefined) {
+    if (this.state.loading) {
       return <h1>Loading...</h1>;
     }
+
+    if (this.state.notFound) {
+      return <h1>No workout found for id: {this.props.match.params.id}</h1>;
+    }
+
+    const { workout } = this.state;
 
     let dateString = fullDateFormat.format(
       new Date(workout.performedAtTimestampUtc)
