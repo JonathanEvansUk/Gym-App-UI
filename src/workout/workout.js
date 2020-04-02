@@ -1,10 +1,8 @@
 import React from "react";
 import ExerciseActivity from "../exerciseActivity/exerciseActivity.js";
-import { Button } from "reactstrap";
 
 import { Container, Card, CardHeader, CardBody } from "reactstrap";
-import AddExerciseActivityModal from "../AddExerciseActivityModal.js";
-import AddWorkoutModal from "./AddWorkoutModal.js";
+import EditWorkoutControls from "./EditWorkoutControls.js";
 
 const fullDateFormat = Intl.DateTimeFormat("en-GB", {
   weekday: "long",
@@ -221,43 +219,20 @@ class Workout extends React.Component {
         <Card>
           <CardHeader>
             {dateString}
-            <div className="float-right">
-              <Button
-                color="danger"
-                size="sm"
-                className="mr-2"
-                onClick={this.deleteWorkout}
-              >
-                Delete Workout
-              </Button>
-              <Button
-                size="sm"
-                className="mr-2"
-                onClick={this.toggleEditWorkoutModal}
-              >
-                Edit Workout
-              </Button>
-              <AddWorkoutModal
-                modal={this.state.editWorkoutModal}
-                toggleModal={this.toggleEditWorkoutModal}
-                newWorkout={this.state.newWorkout}
-                workoutTypes={this.state.workoutTypes}
-                saveWorkout={this.editWorkout}
-                handleWorkoutTypeEdited={this.handleWorkoutTypeEdited}
-                handleWorkoutTimestampEdited={this.handleWorkoutTimestampEdited}
-              />
-              <Button
-                color="primary"
-                size="sm"
-                onClick={this.toggleAddExerciseActivityModal}
-              >
-                Add Exercise Activity
-              </Button>
-            </div>
 
-            <AddExerciseActivityModal
-              modal={this.state.addExerciseActivityModal}
-              toggleModal={this.toggleAddExerciseActivityModal}
+            <EditWorkoutControls
+              deleteWorkout={this.deleteWorkout}
+              toggleEditWorkoutModal={this.toggleEditWorkoutModal}
+              editWorkoutModal={this.state.editWorkoutModal}
+              newWorkout={this.state.newWorkout}
+              workoutTypes={this.state.workoutTypes}
+              editWorkout={this.editWorkout}
+              handleWorkoutTypeEdited={this.handleWorkoutTypeEdited}
+              handleWorkoutTimestampEdited={this.handleWorkoutTimestampEdited}
+              addExerciseActivityModal={this.state.addExerciseActivityModal}
+              toggleAddExerciseActivityModal={
+                this.toggleAddExerciseActivityModal
+              }
               addExerciseActivity={this.addExerciseActivity}
             />
           </CardHeader>
