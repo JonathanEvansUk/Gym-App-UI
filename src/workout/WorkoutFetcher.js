@@ -33,20 +33,20 @@ class WorkoutFetcher extends React.Component {
       addExerciseActivityModal: false,
       editWorkoutModal: false,
       workoutTypes: [],
-      newWorkout: {}
+      newWorkout: {},
     };
   }
 
   handleFetchWorkoutResponse(response) {
     if (response.status === 200) {
-      response.json().then(workout =>
+      response.json().then((workout) =>
         this.setState({
           workout: workout,
           loading: false,
           newWorkout: {
             workoutType: workout.workoutType,
-            performedAtTimestampUtc: workout.performedAtTimestampUtc
-          }
+            performedAtTimestampUtc: workout.performedAtTimestampUtc,
+          },
         })
       );
     } else if (response.status === 404) {
@@ -58,45 +58,45 @@ class WorkoutFetcher extends React.Component {
     const { id } = this.props.match.params;
 
     // TODO these calls should be consolidated
-    fetch("http://localhost:8080/workouts/" + id).then(response =>
+    fetch("http://localhost:8080/workouts/" + id).then((response) =>
       this.handleFetchWorkoutResponse(response)
     );
 
     fetch("http://localhost:8080/workoutTypes")
-      .then(res => res.json())
-      .then(workoutTypes =>
+      .then((res) => res.json())
+      .then((workoutTypes) =>
         this.setState({
-          workoutTypes: workoutTypes
+          workoutTypes: workoutTypes,
         })
       );
   }
 
   toggleAddExerciseActivityModal() {
-    this.setState(prevState => ({
-      addExerciseActivityModal: !prevState.addExerciseActivityModal
+    this.setState((prevState) => ({
+      addExerciseActivityModal: !prevState.addExerciseActivityModal,
     }));
   }
 
   toggleEditWorkoutModal() {
-    this.setState(prevState => ({
-      editWorkoutModal: !prevState.editWorkoutModal
+    this.setState((prevState) => ({
+      editWorkoutModal: !prevState.editWorkoutModal,
     }));
   }
 
   handleWorkoutTypeEdited(event) {
     event.persist();
 
-    this.setState(prevState => ({
-      newWorkout: { ...prevState.newWorkout, workoutType: event.target.value }
+    this.setState((prevState) => ({
+      newWorkout: { ...prevState.newWorkout, workoutType: event.target.value },
     }));
   }
 
   handleWorkoutTimestampEdited(timestamp) {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       newWorkout: {
         ...prevState.newWorkout,
-        performedAtTimestampUtc: timestamp
-      }
+        performedAtTimestampUtc: timestamp,
+      },
     }));
   }
 
@@ -108,10 +108,10 @@ class WorkoutFetcher extends React.Component {
     fetch("http://localhost:8080/workouts/" + this.state.workout.id, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: editWorkoutRequest
+      body: editWorkoutRequest,
     })
-      .then(res => res.json())
-      .then(workout => this.setState({ workout: workout }));
+      .then((res) => res.json())
+      .then((workout) => this.setState({ workout: workout }));
   }
 
   addExerciseActivity(exercise) {
@@ -122,11 +122,11 @@ class WorkoutFetcher extends React.Component {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: exercise.id
+        body: exercise.id,
       }
     )
-      .then(res => res.json())
-      .then(exerciseActivity =>
+      .then((res) => res.json())
+      .then((exerciseActivity) =>
         this.addExerciseActivityToWorkout(exerciseActivity)
       );
   }
@@ -137,7 +137,7 @@ class WorkoutFetcher extends React.Component {
 
     let updatedWorkout = {
       ...this.state.workout,
-      exerciseActivities: updatedExerciseActivities
+      exerciseActivities: updatedExerciseActivities,
     };
 
     this.setState({ workout: updatedWorkout });
@@ -153,12 +153,12 @@ class WorkoutFetcher extends React.Component {
         exerciseActivityId,
       {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       }
     )
-      .then(res => res.json())
+      .then((res) => res.json())
       //TODO add error handling?
-      .then(exerciseActivity =>
+      .then((exerciseActivity) =>
         this.removeExerciseActivityFromWorkout(exerciseActivity)
       );
   }
@@ -168,12 +168,12 @@ class WorkoutFetcher extends React.Component {
 
     //remove exercise activity
     updatedExerciseActivities = updatedExerciseActivities.filter(
-      exerciseActivity => exerciseActivity.id !== deletedExerciseActivity.id
+      (exerciseActivity) => exerciseActivity.id !== deletedExerciseActivity.id
     );
 
     let updatedWorkout = {
       ...this.state.workout,
-      exerciseActivities: updatedExerciseActivities
+      exerciseActivities: updatedExerciseActivities,
     };
 
     this.setState({ workout: updatedWorkout });
@@ -184,8 +184,8 @@ class WorkoutFetcher extends React.Component {
 
     fetch("http://localhost:8080/workouts/" + id, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" }
-    }).then(res => this.props.history.push("/workouts"));
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => this.props.history.push("/workouts"));
   }
 
   render() {
