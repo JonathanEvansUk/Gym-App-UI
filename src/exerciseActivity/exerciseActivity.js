@@ -257,7 +257,7 @@ function Sets(props) {
   return sets.map((set, index) => {
     return (
       <Set
-        key={index}
+        key={set.id}
         set={set}
         index={index}
         editable={editable}
